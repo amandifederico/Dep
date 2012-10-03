@@ -8,13 +8,13 @@
 #sudo apt-get install python-reportlab
 #sudo apt-get install python-imagin
 
-import ho.pisa as pisa #esto hay que bajarlo de internet, se puede instalar con easy install - http://pypi.python.org/pypi/pisa/
+#import ho.pisa as pisa #esto hay que bajarlo de internet, se puede instalar con easy install - http://pypi.python.org/pypi/pisa/
 import cStringIO as StringIO
 import cgi
 from django.template import RequestContext, Template, Context
 from django.template.loader import *
 from django.http import HttpResponse
-from reportlab.pdfgen import canvas
+#from reportlab.pdfgen import canvas
 #====================================================
 from depoapp.models import *
 import psycopg2
