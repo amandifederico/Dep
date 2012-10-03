@@ -1,0 +1,669 @@
+from django.db import models
+from django.utils.encoding import force_unicode
+
+# Create your models here.
+
+
+#----------------------------------------------------------------------------------------------------
+class Barras(models.Model):
+     idbarra = models.AutoField(primary_key=True, db_column='idBarra')
+     idelemento = models.IntegerField(db_column='idElemento') # Field name made lowercase.
+     codigo = models.CharField(max_length=200)
+
+     class Meta:
+        db_table = u'barras'
+        verbose_name_plural = "Codigo de Barra"
+        
+     def __unicode__(self):
+        return force_unicode(self.codigo)
+
+#----------------------------------------------------------------------------------------------------
+class Cuentaspatrimoniales(models.Model):
+     codigocuenta = models.SmallIntegerField(primary_key=True, db_column='codigoCuenta') # Field name made lowercase.
+     descripcioncuenta = models.CharField(max_length=200, db_column='descripcionCuenta') # Field name made lowercase.
+     class Meta:
+        db_table = u'cuentasPatrimoniales'
+        verbose_name_plural ="Cuentas Patrimoniales"
+     def __unicode__(self):
+        return force_unicode(self.descripcioncuenta)
+        
+#----------------------------------------------------------------------------------------------------
+class Unidadesmedidas(models.Model):
+    descripcionunidad = models.CharField(max_length=4, db_column='descripcionUnidad') # Field name made lowercase.
+    idunidadmedida = models.IntegerField(primary_key=True, db_column='idUnidadMedida') # Field name made lowercase.
+    class Meta:
+        db_table = u'unidadesMedidas'
+        verbose_name_plural ="Unidad de Medida"        
+    def __unicode__(self):
+        return force_unicode(self.descripcionunidad)
+#----------------------------------------------------------------------------------------------------
+class Articulo(models.Model):
+     idarticulo = models.AutoField(primary_key=True, db_column='idArticulo')
+     fechacosto = models.DateField(db_column='fechaCosto') # Field name made lowercase.
+     nrocuentapatrimonial = models.ForeignKey(Cuentaspatrimoniales, db_column='nroCuentaPatrimonial') # Field name made lowercase.
+     nroficha = models.SmallIntegerField(db_column='nroFicha') # Field name made lowercase.
+     preciounitario = models.CharField(max_length=200, db_column='precioUnitario') # Field name made lowercase. This field type is a guess.
+     descripcionitem = models.CharField(max_length=200, db_column='descripcionItem') # Field name made lowercase.
+     mueble = models.CharField(max_length=200)
+     casillero = models.CharField(max_length=200)
+     stmin = models.SmallIntegerField(db_column='stMin') # Field name made lowercase.
+     idbarra = models.ForeignKey(Barras, db_column='idBarra') # Field name made lowercase.
+     unidadmedida = models.ForeignKey(Unidadesmedidas, db_column='unidadMedida') # Field name made lowercase.
+     class Meta:
+        db_table = u'articulo'
+        verbose_name_plural ="Articulo"
+     def __unicode__(self):
+        return force_unicode(self.descripcionitem)
+#----------------------------------------------------------------------------------------------------
+class Ciudad(models.Model):
+     idciudad = models.AutoField(primary_key=True, db_column='idCiudad')
+     codigopostal = models.SmallIntegerField(db_column='codigoPostal') # Field name made lowercase.
+     nombre = models.CharField(max_length=200)
+
+     class Meta:
+        db_table = u'ciudad'
+     def __unicode__(self):
+        return force_unicode(self.nombre)
+        
+#----------------------------------------------------------------------------------------------------
+class Deposito(models.Model):
+     iddeposito = models.AutoField(primary_key=True, db_column='idDeposito')
+     idciudad = models.ForeignKey(Ciudad, db_column='idCiudad') # Field name made lowercase.
+     telefono = models.CharField(max_length=200)
+     direccion = models.CharField(max_length=200)
+
+     class Meta:
+        db_table = u'deposito'
+     def __unicode__(self):
+        return force_unicode(self.direccion)
+        
+#----------------------------------------------------------------------------------------------------
+class Salida(models.Model):
+     idsalida = models.AutoField(primary_key=True, db_column='idSalida')
+     fecha = models.DateField()
+     entregadoa = models.CharField(max_length=200, db_column='entregadoA') # Field name made lowercase.
+     destino = models.CharField(max_length=200)
+     observaciones = models.CharField(max_length=200)
+     iddeposito =models.ForeignKey(Deposito,db_column='idDeposito') # Field name made lowercase.
+
+     class Meta:
+        db_table = u'salida'
+     def __unicode__(self):
+        return force_unicode(self.observaciones)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------
+class Detallesalida(models.Model):
+     iddetsalida = models.AutoField(primary_key=True, db_column='idDetSalida')
+     idsalida = models.ForeignKey(Salida, db_column='idSalida') # Field name made lowercase.
+     cantidad = models.FloatField()
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+
+     class Meta:
+        db_table = u'detalleSalida'
+     def __unicode__(self):
+         return force_unicode(self.idsalida)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------
+class Transferencia(models.Model):
+     idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+     fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+     fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOut') # Field name made lowercase.
+     confirmado = models.BooleanField()
+     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoIn') # Field name made lowercase.
+     
+     class Meta:
+         db_table = u'transferencia'
+     def __unicode__(self):
+         return force_unicode(self.idtransferencia)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------
+class Detalletrasferencia(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(Transferencia, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------
+class Proveedor(models.Model):
+     razonsocial = models.CharField(max_length=200, db_column='razonSocial') # Field name made lowercase.
+     domicilio = models.CharField(max_length=200)
+     ciudad = models.CharField(max_length=200)
+     codigopostal = models.SmallIntegerField(db_column='codigoPostal') # Field name made lowercase.
+     telefono = models.CharField(max_length=200)
+     idproveedor = models.IntegerField(primary_key=True, db_column='idProveedor') # Field name made lowercase.
+     class Meta:
+         db_table = u'proveedor'
+     def __unicode__(self):
+         return force_unicode(self.razonsocial)
+
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------
+#====================================================================================================================================================
+
+#////////////////////////////////////////////////////////
+# Vista Transferencia Entrada-Salida Rawson
+
+class VwTransfEntRw(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntRw') # Field name made lowercase.
+    confirmado = models.BooleanField()
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntRw') # Field name made lowercase.
+    class Meta:
+        #db_table = u'VW_transfEntRw'
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Entrada Rw"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)    
+
+class VwTransfSalRw(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfSalRw') # Field name made lowercase.
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfSalRw') # Field name made lowercase.
+    class Meta:
+        #db_table = u'VW_transfSalRw'
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Salida Rw"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)    
+
+class DetalleTransfEntRw(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(VwTransfEntRw, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)
+
+class DetalleTransfSalRw(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(VwTransfSalRw, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)
+
+#////////////////////////////////////////////////////////
+# Vista Transferencia Entrada-Salida Madryn
+
+class VwTransfEntMadryn(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntMadryn') # Field name made lowerca$
+    confirmado = models.BooleanField()
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntMadryn') # Field name made lowerca$
+    class Meta:
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Entrada Madryn"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)
+class VwTransfEntMadryn(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntMadryn') # Field name made lowercase.
+    confirmado = models.BooleanField()
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntMadryn') # Field name made lowercase.
+    class Meta:
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Entrada Madryn"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)    
+
+class VwTransfSalMadryn(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfSalMadryn') # Field name made lowercase.
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfSalMadryn') # Field name made lowercase.
+    class Meta:
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Salida Madryn"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)    
+
+class DetalleTransfEntMadryn(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(VwTransfEntMadryn, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)
+
+class DetalleTransfSalMadryn(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(VwTransfSalMadryn, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)             
+
+#////////////////////////////////////////////////////////
+# Vista Transferencia Entrada-Salida Gaiman
+
+class VwTransfEntGaiman(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntGaiman') # Field name made lowercase.
+    confirmado = models.BooleanField()
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntGaiman') # Field name made lowercase.
+    class Meta:
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Entrada Gaiman"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)    
+
+class VwTransfSalGaiman(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfSalGaiman') # Field name made lowercase.
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfSalGaiman') # Field name made lowercase.
+    class Meta:
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Salida Gaiman"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)    
+
+class DetalleTransfEntGaiman(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(VwTransfEntGaiman, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)
+
+class DetalleTransfSalGaiman(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(VwTransfSalGaiman, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)          
+
+#////////////////////////////////////////////////////////
+# Vista Transferencia Entrada-Salida Sarmiento
+
+class VwTransfEntSarmiento(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntSarmiento') # Field name made lowercase.
+    confirmado = models.BooleanField()
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntSarmiento') # Field name made lowercase.
+    class Meta:
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Entrada Sarmiento"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)    
+
+class VwTransfSalSarmiento(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfSalSarmiento') # Field name made lowercase.
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfSalSarmiento') # Field name made lowercase.
+    class Meta:
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Salida Sarmiento"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)    
+
+class DetalleTransfEntSarmiento(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(VwTransfEntSarmiento, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)
+
+class DetalleTransfSalSarmiento(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(VwTransfSalSarmiento, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)               
+
+#////////////////////////////////////////////////////////
+# Vista Transferencia Entrada-Salida Esquel
+
+class VwTransfEntEsquel(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntEsquel') # Field name made lowercase.
+    confirmado = models.BooleanField()
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntEsquel') # Field name made lowercase.
+    class Meta:
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Entrada Esquel"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)    
+
+class VwTransfSalEsquel(models.Model):
+    idtransferencia = models.AutoField(primary_key=True, db_column='idTransferencia')
+    fechasalida = models.DateField(db_column='fechaSalida') # Field name made lowercase.
+    fechaentrada = models.DateField(db_column='fechaEntrada', blank=True) # Field name made lowercase.
+    depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfSalEsquel') # Field name made lowercase.
+    depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfSalEsquel') # Field name made lowercase.
+    class Meta:
+        db_table = u'transferencia'
+        verbose_name_plural ="VW Transferencias Salida Esquel"
+    def __unicode__(self):
+        return force_unicode(self.idtransferencia)    
+
+class DetalleTransfEntEsquel(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(VwTransfEntEsquel, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)
+
+class DetalleTransfSalEsquel(models.Model):
+     iddettransferencia = models.AutoField(primary_key=True, db_column='idDetTransferencia')
+     idtransferencia = models.ForeignKey(VwTransfSalEsquel, db_column='idTransferencia') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     cantidad = models.FloatField()
+     class Meta:
+         db_table = u'detalleTrasferencia'
+     def __unicode__(self):
+         return force_unicode(self.iddettransferencia)    
+         
+#----------------------------------------------------------------------------------------------------------------------------------------------------
+#====================================================================================================================================================
+
+
+class Compra(models.Model):
+     idcompra = models.AutoField(primary_key=True, db_column='idCompra')
+     tipo = models.CharField(max_length=200)
+     fecha = models.DateField()
+     idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor')
+     iddeposito = models.ForeignKey(Deposito, db_column='idDeposito')
+     nroremito = models.IntegerField(db_column='nroRemito')
+     nroordencompra = models.IntegerField(db_column='nroOrdenCompra')
+     nroexpediente = models.IntegerField(db_column='nroExpediente')
+     observaciones = models.CharField(max_length=200)
+     class Meta:
+         db_table = u'compra'
+         verbose_name_plural ="Entrada"
+     def __unicode__(self):
+         return force_unicode(self.observaciones)
+
+         
+class VwComprasrw(models.Model):
+    idcompra = models.AutoField(primary_key=True, db_column='idCompra')
+    tipo = models.CharField(max_length=200)
+    fecha = models.DateField()
+    idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor')
+    iddeposito = models.ForeignKey(Deposito, db_column='idDeposito', default=5, editable=False)
+    nroremito = models.IntegerField(db_column='nroRemito')
+    nroordencompra = models.IntegerField(db_column='nroOrdenCompra')
+    nroexpediente = models.IntegerField(db_column='nroExpediente')
+    observaciones = models.CharField(max_length=200)
+    class Meta:
+        db_table = u'compra'
+        verbose_name_plural ="VW Entrada rw"
+    def __unicode__(self):
+        return force_unicode(self.observaciones)    
+
+class VwComprassarmiento(models.Model):
+    idcompra = models.AutoField(primary_key=True, db_column='idCompra')
+    tipo = models.CharField(max_length=200)
+    fecha = models.DateField()
+    idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor')
+    iddeposito = models.ForeignKey(Deposito, db_column='idDeposito', default=1, editable=False)
+    nroremito = models.IntegerField(db_column='nroRemito')
+    nroordencompra = models.IntegerField(db_column='nroOrdenCompra')
+    nroexpediente = models.IntegerField(db_column='nroExpediente')
+    observaciones = models.CharField(max_length=200)
+    class Meta:
+        db_table = u'compra'
+        verbose_name_plural ="VW Entrada Sarmiento"
+    def __unicode__(self):
+        return force_unicode(self.observaciones)    
+
+class VwCompraspmadryn(models.Model):
+    idcompra = models.AutoField(primary_key=True, db_column='idCompra')
+    tipo = models.CharField(max_length=200)
+    fecha = models.DateField()
+    idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor')
+    iddeposito = models.ForeignKey(Deposito, db_column='idDeposito', default=2, editable=False)
+    nroremito = models.IntegerField(db_column='nroRemito')
+    nroordencompra = models.IntegerField(db_column='nroOrdenCompra')
+    nroexpediente = models.IntegerField(db_column='nroExpediente')
+    observaciones = models.CharField(max_length=200)
+    class Meta:
+        db_table = u'compra'
+        verbose_name_plural ="VW Entrada Madryn"
+    def __unicode__(self):
+        return force_unicode(self.observaciones)
+
+class VwComprasesquel(models.Model):
+    idcompra = models.AutoField(primary_key=True, db_column='idCompra')
+    tipo = models.CharField(max_length=200)
+    fecha = models.DateField()
+    idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor')
+    iddeposito = models.ForeignKey(Deposito, db_column='idDeposito', default=3, editable=False)
+    nroremito = models.IntegerField(db_column='nroRemito')
+    nroordencompra = models.IntegerField(db_column='nroOrdenCompra')
+    nroexpediente = models.IntegerField(db_column='nroExpediente')
+    observaciones = models.CharField(max_length=200)
+    class Meta:
+        db_table = u'compra'
+        verbose_name_plural ="VW Entrada Esquel"
+    def __unicode__(self):
+        return force_unicode(self.observaciones)
+
+class VwComprasgaiman(models.Model):
+    idcompra = models.AutoField(primary_key=True, db_column='idCompra')
+    tipo = models.CharField(max_length=200)
+    fecha = models.DateField()
+    idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor')
+    iddeposito = models.ForeignKey(Deposito, db_column='idDeposito', default=4, editable=False)
+    nroremito = models.IntegerField(db_column='nroRemito')
+    nroordencompra = models.IntegerField(db_column='nroOrdenCompra')
+    nroexpediente = models.IntegerField(db_column='nroExpediente')
+    observaciones = models.CharField(max_length=200)
+    class Meta:
+        db_table = u'compra'
+        verbose_name_plural ="VW Entrada Gaiman"
+    def __unicode__(self):
+        return force_unicode(self.observaciones)         
+
+class Detallecomprarw(models.Model):
+     iddetcompra = models.AutoField(primary_key=True, db_column='idDetCompra')
+     idcompra = models.ForeignKey(VwComprasrw, db_column='idCompra') 
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo')
+     cantidad = models.FloatField()
+     preciounitario = models.CharField(max_length=200, db_column='precioUnitario')
+
+     class Meta:
+         db_table = u'detalleCompra'
+     def __unicode__(self):
+         return force_unicode(self.iddetcompra)                
+        
+class Detallecomprasarmiento(models.Model):
+     iddetcompra = models.AutoField(primary_key=True, db_column='idDetCompra')
+     idcompra = models.ForeignKey(VwComprassarmiento, db_column='idCompra') 
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo')
+     cantidad = models.FloatField()
+     preciounitario = models.CharField(max_length=200, db_column='precioUnitario')
+
+     class Meta:
+         db_table = u'detalleCompra'
+     def __unicode__(self):
+         return force_unicode(self.iddetcompra)              
+        
+class Detallecomprapmadryn(models.Model):
+     iddetcompra = models.AutoField(primary_key=True, db_column='idDetCompra')
+     idcompra = models.ForeignKey(VwCompraspmadryn, db_column='idCompra') 
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo')
+     cantidad = models.FloatField()
+     preciounitario = models.CharField(max_length=200, db_column='precioUnitario')
+
+     class Meta:
+         db_table = u'detalleCompra'
+     def __unicode__(self):
+         return force_unicode(self.iddetcompra)                
+        
+class Detallecompragaiman(models.Model):
+     iddetcompra = models.AutoField(primary_key=True, db_column='idDetCompra')
+     idcompra = models.ForeignKey(VwComprasgaiman, db_column='idCompra') 
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo')
+     cantidad = models.FloatField()
+     preciounitario = models.CharField(max_length=200, db_column='precioUnitario')
+
+     class Meta:
+         db_table = u'detalleCompra'
+     def __unicode__(self):
+         return force_unicode(self.iddetcompra)        
+
+         
+class Detallecompraesquel(models.Model):
+     iddetcompra = models.AutoField(primary_key=True, db_column='idDetCompra')
+     idcompra = models.ForeignKey(VwComprasesquel, db_column='idCompra') 
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo')
+     cantidad = models.FloatField()
+     preciounitario = models.CharField(max_length=200, db_column='precioUnitario')
+
+     class Meta:
+         db_table = u'detalleCompra'
+     def __unicode__(self):
+         return force_unicode(self.iddetcompra)        
+
+class Detallecompra(models.Model):
+     iddetcompra = models.AutoField(primary_key=True, db_column='idDetCompra')
+     idcompra = models.ForeignKey(Compra, db_column='idCompra') 
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo')
+     cantidad = models.FloatField()
+     preciounitario = models.CharField(max_length=200, db_column='precioUnitario')
+
+     class Meta:
+         db_table = u'detalleCompra'
+     def __unicode__(self):
+         return force_unicode(self.iddetcompra)
+
+#====================================================================================================================================================
+#----------------------------------------------------------------------------------------------------------------------------------------------------
+class Devoluciones(models.Model):
+     iddevolucion = models.AutoField(primary_key=True, db_column='idDevolucion')
+     idcompra = models.ForeignKey(Compra, db_column='idCompra') # Field name made lowercase.
+     iddeposito = models.ForeignKey(Deposito, db_column='idDeposito') # Field name made lowercase.
+     descripcion = models.CharField(max_length=200)
+     
+     class Meta:
+         db_table = u'devoluciones'
+     def __unicode__(self):
+         return force_unicode(self.descripcion)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------
+class Detalledevolucion(models.Model):
+     iddetdevolucion = models.AutoField(primary_key=True, db_column='idDetDevolucion')
+     iddevolucion = models.ForeignKey(Devoluciones,db_column='idDevolucion') # Field name made lowercase.
+     cantidad = models.FloatField()
+     idarticulo = models.ForeignKey(Articulo,db_column='idArticulo') # Field name made lowercase.
+     iddetcompra = models.ForeignKey(Detallecompra,db_column='idDetCompra') # Field name made lowercase.
+
+     class Meta:
+         db_table = u'detalleDevolucion'
+     def __unicode__(self):
+         return force_unicode(self.iddetdevolucion)
+#----------------------------------------------------------------------------------------------------------------------------------------------------
+         
+class Articulodeposito(models.Model):
+     idarticulodeposito = models.AutoField(primary_key=True, db_column='idArticuloDeposito')
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo') # Field name made lowercase.
+     iddeposito = models.ForeignKey(Deposito, db_column='idDeposito') # Field name made lowercase.
+     stock = models.FloatField()
+
+     class Meta:
+         db_table = u'articuloDeposito'
+     def __unicode__(self):
+         return force_unicode(self.idarticulodeposito)
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+        
+#*********************************************************************************************************************************
+class AuthUser(models.Model):
+    id = models.IntegerField(primary_key=True)
+    username = models.CharField(unique=True, max_length=30)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    email = models.CharField(max_length=75)
+    password = models.CharField(max_length=128)
+    is_staff = models.BooleanField()
+    is_active = models.BooleanField()
+    is_superuser = models.BooleanField()
+    last_login = models.DateTimeField()
+    date_joined = models.DateTimeField()
+    class Meta:
+        db_table = u'auth_user'
+    def __unicode__(self):
+        return force_unicode(self.username)    
+        
+class DjangoContentType(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
+    app_label = models.CharField(max_length=100)
+    model = models.CharField(max_length=100)
+    class Meta:
+        db_table = u'django_content_type'
+    def __unicode__(self):
+        return force_unicode(self.name)    
+        
+        
+        
+class DjangoSession(models.Model):
+    session_key = models.CharField(max_length=40, primary_key=True)
+    session_data = models.TextField()
+    expire_date = models.DateTimeField()
+    class Meta:
+        db_table = u'django_session'
+    def __unicode__(self):
+        return force_unicode(self.session_data)    
+        
+class Log(models.Model):
+    id = models.IntegerField(primary_key=True)
+    action_time = models.DateTimeField()
+    user = models.ForeignKey(AuthUser)
+    content_type = models.ForeignKey(DjangoContentType)
+    object_id = models.TextField()
+    object_repr = models.CharField(max_length=200)
+    action_flag = models.SmallIntegerField()
+    change_message = models.TextField()
+    class Meta:
+        db_table = u'django_admin_log'
+    def __unicode__(self):
+        return force_unicode(self.user)

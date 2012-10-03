@@ -1,0 +1,350 @@
+# -*- coding: utf-8 -*-
+from depoapp.models import *
+from django.db.models import base
+from django.contrib import admin
+
+
+
+class ArticuloAdmin(admin.ModelAdmin):
+     list_display = ('descripcionitem','fechacosto','nrocuentapatrimonial','nroficha','preciounitario','casillero',)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+class ArticulodepositoAdmin(admin.ModelAdmin):
+     list_display = ('idarticulo','iddeposito','stock',)
+     list_filter = ('iddeposito',)
+     search_fields = ('idarticulo__descripcionitem','iddeposito__direccion',)
+     ordering = ('idarticulo',)
+     
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+class CiudadAdmin(admin.ModelAdmin):
+     list_display = ('nombre','codigopostal',)
+     
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+class CuentaspatrimonialesAdmin(admin.ModelAdmin):
+     list_display = ('descripcioncuenta','codigocuenta',)
+     
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+class DepositoAdmin(admin.ModelAdmin):
+     list_display = ('idciudad','telefono','direccion',)
+     
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+class ProveedorAdmin(admin.ModelAdmin):
+     list_display = ('razonsocial','domicilio','ciudad','codigopostal','telefono',)
+     list_filter = ('ciudad',)
+     search_fields = ('razonsocial','domicilio',)
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+#======================================================================
+class DetalleCompraInline(admin.TabularInline):
+     model = Detallecompra
+
+class CompraAdmin(admin.ModelAdmin):
+     list_display = ('observaciones','tipo','fecha','idproveedor','iddeposito','nroordencompra','nroexpediente','nroremito',)
+     list_filter = ('iddeposito','tipo')
+     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     ordering = ('fecha',)
+     inlines = [DetalleCompraInline]
+
+#////////////////////////////////////////////////////////  
+   
+class DetalleCompraInlinerw(admin.TabularInline):
+     model = Detallecomprarw
+    
+class CompraAdminrw(admin.ModelAdmin):
+     list_display = ('observaciones','tipo','fecha','idproveedor','iddeposito','nroordencompra','nroexpediente','nroremito',)
+     list_filter = ('iddeposito','tipo')
+     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     ordering = ('fecha',)
+     inlines = [DetalleCompraInlinerw]  
+     
+#////////////////////////////////////////////////////////
+     
+class DetalleCompraInlinesarmiento(admin.TabularInline):
+     model = Detallecomprasarmiento
+
+class CompraAdminsarmiento(admin.ModelAdmin):
+     list_display = ('observaciones','tipo','fecha','idproveedor','iddeposito','nroordencompra','nroexpediente','nroremito',)
+     list_filter = ('iddeposito','tipo')
+     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     ordering = ('fecha',)
+     inlines = [DetalleCompraInlinesarmiento]   
+
+#////////////////////////////////////////////////////////     
+     
+class DetalleCompraInlinepmadryn(admin.TabularInline):
+     model = Detallecomprapmadryn
+     
+class CompraAdminpmadryn(admin.ModelAdmin):
+     list_display = ('observaciones','tipo','fecha','idproveedor','iddeposito','nroordencompra','nroexpediente','nroremito',)
+     list_filter = ('iddeposito','tipo')
+     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     ordering = ('fecha',)
+     inlines = [DetalleCompraInlinepmadryn]
+     
+#////////////////////////////////////////////////////////
+     
+class DetalleCompraInlinegaiman(admin.TabularInline):
+     model = Detallecompragaiman
+
+class CompraAdmingaiman(admin.ModelAdmin):
+     list_display = ('observaciones','tipo','fecha','idproveedor','iddeposito','nroordencompra','nroexpediente','nroremito',)
+     list_filter = ('iddeposito','tipo')
+     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     ordering = ('fecha',)
+     inlines = [DetalleCompraInlinegaiman]    
+     
+#////////////////////////////////////////////////////////
+
+class DetalleCompraInlineesquel(admin.TabularInline):
+     model = Detallecompraesquel
+
+class CompraAdminesquel(admin.ModelAdmin):
+     list_display = ('observaciones','tipo','fecha','idproveedor','iddeposito','nroordencompra','nroexpediente','nroremito',)
+     list_filter = ('iddeposito','tipo')
+     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     ordering = ('fecha',)
+     inlines = [DetalleCompraInlineesquel]    
+     
+#======================================================================
+#--------SALIDAS----------------------------------------------------------------------------------------------------------------------------------
+
+class DetalleSalidaInline(admin.TabularInline):
+     model = Detallesalida     
+
+class DetalleSalidaInline(admin.TabularInline):
+     model = Detallesalida
+
+
+
+class SalidaAdmin(admin.ModelAdmin):
+      inlines = [DetalleSalidaInline]
+      list_display = ('fecha','entregadoa','destino','observaciones','iddeposito',)
+      list_filter = ('iddeposito',)
+      search_fields = ('fecha','entregadoa','destino','observaciones',)
+
+#======================================================================
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+
+class DetalleDevolucionesInline(admin.TabularInline):
+     model = Detalledevolucion
+
+class DevolucionesAdmin(admin.ModelAdmin):
+     inlines = [DetalleDevolucionesInline]
+     list_display = ('idcompra','iddeposito','descripcion',)
+     list_filter = ('iddeposito',)
+     search_fields = ('idcompra__observacion','iddeposito__direccion')
+     
+#======================================================================     
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+
+# DETALLES TRANSFERENCIAS
+
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Salida Rawson
+
+class DetalleTransferenciaInlineTransfSalRw(admin.TabularInline):
+     model = DetalleTransfSalRw
+
+
+class TransfSalRw(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInlineTransfSalRw]
+     list_display = ('fechaentrada','fechasalida','depositoentrada','depositosalida',)
+     list_filter = ('depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)     
+
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Entrada Rawson
+
+class DetalleTransferenciaInlineTransfEntRw(admin.TabularInline):
+     model = DetalleTransfEntRw
+ 
+ 
+class TransfEntRw(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInlineTransfEntRw]
+     list_display = ('fechaentrada','fechasalida','confirmado','depositoentrada','depositosalida',)
+     list_filter = ('confirmado','depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)
+
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Salida Madryn
+
+class DetalleTransferenciaInlineTransfSalMadryn(admin.TabularInline):
+     model = DetalleTransfSalMadryn
+
+
+class TransfSalMadryn(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInlineTransfSalMadryn]
+     list_display = ('fechaentrada','fechasalida','depositoentrada','depositosalida',)
+     list_filter = ('depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)          
+     
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Entrada Madryn
+
+class DetalleTransferenciaInlineTransfEntMadryn(admin.TabularInline):
+     model = DetalleTransfEntMadryn
+ 
+ 
+class TransfEntMadryn(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInlineTransfEntMadryn]
+     list_display = ('fechaentrada','fechasalida','confirmado','depositoentrada','depositosalida',)
+     list_filter = ('confirmado','depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)     
+
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Salida Gaiman
+
+class DetalleTransferenciaInlineTransfSalGaiman(admin.TabularInline):
+     model = DetalleTransfSalGaiman
+
+
+class TransfSalGaiman(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInlineTransfSalGaiman]
+     list_display = ('fechaentrada','fechasalida','depositoentrada','depositosalida',)
+     list_filter = ('depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)     
+
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Entrada Gaiman
+
+class DetalleTransferenciaInlineTransfEntGaiman(admin.TabularInline):
+     model = DetalleTransfEntGaiman
+ 
+ 
+class TransfEntGaiman(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInlineTransfEntGaiman]
+     list_display = ('fechaentrada','fechasalida','confirmado','depositoentrada','depositosalida',)
+     list_filter = ('confirmado','depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)
+
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Salida Sarmiento
+
+class DetalleTransferenciaInlineTransfSalSarmiento(admin.TabularInline):
+     model = DetalleTransfSalSarmiento
+
+
+class TransfSalSarmiento(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInlineTransfSalSarmiento]
+     list_display = ('fechaentrada','fechasalida','depositoentrada','depositosalida',)
+     list_filter = ('depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)     
+
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Entrada Sarmiento
+
+class DetalleTransferenciaInlineTransfEntSarmiento(admin.TabularInline):
+     model = DetalleTransfEntSarmiento
+ 
+ 
+class TransfEntSarmiento(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInlineTransfEntSarmiento]
+     list_display = ('fechaentrada','fechasalida','confirmado','depositoentrada','depositosalida',)
+     list_filter = ('confirmado','depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)     
+
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Salida Esquel
+
+class DetalleTransferenciaInlineTransfSalEsquel(admin.TabularInline):
+     model = DetalleTransfSalEsquel
+
+
+class TransfSalEsquel(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInlineTransfSalEsquel]
+     list_display = ('fechaentrada','fechasalida','depositoentrada','depositosalida',)
+     list_filter = ('depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)     
+
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Entrada Esquel
+
+class DetalleTransferenciaInlineTransfEntEsquel(admin.TabularInline):
+     model = DetalleTransfEntEsquel
+ 
+ 
+class TransfEntEsquel(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInlineTransfEntEsquel]
+     list_display = ('fechaentrada','fechasalida','confirmado','depositoentrada','depositosalida',)
+     list_filter = ('confirmado','depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)     
+     
+#////////////////////////////////////////////////////////
+# Detalle Transferencia Administrador
+
+class DetalleTransferenciaInline(admin.TabularInline):
+     model = Detalletrasferencia 
+     
+class TransferenciaAdmin(admin.ModelAdmin):
+     inlines = [DetalleTransferenciaInline]
+     list_display = ('fechaentrada','fechasalida','confirmado','depositoentrada','depositosalida',)
+     list_filter = ('confirmado','depositoentrada','depositosalida')
+     search_fields = ('fechaentrada','fechasalida',)
+
+
+#////////////////////////////////////////////////////////
+# Historial Precios
+
+class HistorialPreciosInline(admin.TabularInline):
+     list_display = ('idhistorialprecios', 'idarticulo', 'idproveedor', 'iddeposito', 'fecha', 'iddetcompra',)
+     model = HistorialPrecios
+
+
+#////////////////////////////////////////////////////////
+# VW Deposito RW
+
+class vwdepositorawsonInline(admin.TabularInline):
+     model = ArticuloDepositoRawson
+
+class vwdepositorawsonAdmin(admin.ModelAdmin):
+     inlines = [HistorialPreciosInline]
+     list_display = ('descripcionitem','fechacosto','nrocuentapatrimonial', 'nroficha', 'preciounitario', 'mueble', 'casillero', 'stmin', 'idbarra', 'unidadmedida', 'stock', 'stockentrante', 'stocksaliente',)
+
+#======================================================================
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+
+class LogAdmin(admin.ModelAdmin):
+     list_display = ('user','action_time','content_type','object_id','object_repr','action_flag','change_message',)
+     list_filter = ('user',)
+
+
+
+admin.site.register(Articulo, ArticuloAdmin)
+admin.site.register(Barras)
+admin.site.register(Cuentaspatrimoniales,CuentaspatrimonialesAdmin)
+admin.site.register(Ciudad, CiudadAdmin)
+admin.site.register(Deposito, DepositoAdmin)
+admin.site.register(Salida, SalidaAdmin)
+admin.site.register(VwSalidaesquel, SalidaAdmin)
+admin.site.register(VwSalidamadryn, SalidaAdmin)
+admin.site.register(VwSalidasarmiento, SalidaAdmin)
+admin.site.register(VwSalidarw, SalidaAdmin)
+admin.site.register(VwSalidagaiman, SalidaAdmin)
+#admin.site.register(Detallesalida)
+admin.site.register(Transferencia, TransferenciaAdmin)
+#admin.site.register(Detalletrasferencia)
+admin.site.register(Proveedor,ProveedorAdmin)
+#admin.site.register(Detallecompra, DetallecompraAdmin)
+admin.site.register(Compra, CompraAdmin)
+admin.site.register(Devoluciones, DevolucionesAdmin)
+#admin.site.register(Detalledevolucion)
+#admin.site.register(Articulodeposito,ArticulodepositoAdmin)
+#admin.site.register(VwCompras)
+admin.site.register(VwTransfEntRw, TransfEntRw) # Transferencia Entrada Rawson
+admin.site.register(VwTransfSalRw, TransfSalRw) # Transferencia Salida Rawson
+admin.site.register(VwTransfEntMadryn, TransfEntMadryn) # Transferencia Entrada Madryn
+admin.site.register(VwTransfSalMadryn, TransfSalMadryn) # Transferencia Salida Madryn
+admin.site.register(VwTransfEntGaiman, TransfEntGaiman) # Transferencia Entrada Gaiman
+admin.site.register(VwTransfSalGaiman, TransfSalGaiman) # Transferencia Salida Gaiman
+admin.site.register(VwTransfEntSarmiento, TransfEntSarmiento) # Transferencia Entrada Sarmiento
+admin.site.register(VwTransfSalSarmiento, TransfSalSarmiento) # Transferencia Salida Sarmiento
+admin.site.register(VwTransfEntEsquel, TransfEntEsquel) # Transferencia Entrada Esquel
+admin.site.register(VwTransfSalEsquel, TransfSalEsquel) # Transferencia Salida Esquel
+admin.site.register(VwComprasrw, CompraAdminrw)
+admin.site.register(VwComprassarmiento, CompraAdminsarmiento)
+admin.site.register(VwCompraspmadryn, CompraAdminpmadryn)
+admin.site.register(VwComprasesquel, CompraAdminesquel)
+admin.site.register(VwComprasgaiman, CompraAdmingaiman)
+admin.site.register(ArticuloDepositoRawson, vwdepositorawsonAdmin)
+
+admin.site.register(Log,LogAdmin)
+#admin.site.register(DjangoSession)
