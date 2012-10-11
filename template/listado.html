@@ -12,41 +12,60 @@
 {% block footer %}{% endblock %}
 
 {% block content %}
-<div id="content-main">
+	<div id="content-main">
+<p>asdasdasdasd </p>
+	<div class="results">
+		<table id="result_list">
+			<thead>
+				<tr>
+					<th>Razon Social</th>
+					<th>Direccion</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for list in lista%}
+					<tr class="{% cycle 'row1' 'row2' %}">
+							<td>{{list.razonsocial}}</td>
+							<td>{{list.domicilio}}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	
+	{% if app_list %}
+	    {% for app in app_list %}
+		<div class="module">
+		<table summary="{% blocktrans with name=app.name %}Models available in the {{ name }} application.{% endblocktrans %}">
+		<caption><a href="{{ app.app_url }}" class="section">{% blocktrans with name=app.name %}{{ name }}{% endblocktrans %}</a></caption>
+		{% for model in app.models %}
+		    <tr>
+		    {% if model.admin_url %}
+		        <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
+		    {% else %}
+		        <th scope="row">{{ model.name }}</th>
+		    {% endif %}
 
-{% if app_list %}
-    {% for app in app_list %}
-        <div class="module">
-        <table summary="{% blocktrans with name=app.name %}Models available in the {{ name }} application.{% endblocktrans %}">
-        <caption><a href="{{ app.app_url }}" class="section">{% blocktrans with name=app.name %}{{ name }}{% endblocktrans %}</a></caption>
-        {% for model in app.models %}
-            <tr>
-            {% if model.admin_url %}
-                <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
-            {% else %}
-                <th scope="row">{{ model.name }}</th>
-            {% endif %}
+		    {% if model.add_url %}
+		        <td><a href="{{ model.add_url }}" class="addlink">{% trans 'Add' %}</a></td>
+		    {% else %}
+		        <td>&nbsp;</td>
+		    {% endif %}
 
-            {% if model.add_url %}
-                <td><a href="{{ model.add_url }}" class="addlink">{% trans 'Add' %}</a></td>
-            {% else %}
-                <td>&nbsp;</td>
-            {% endif %}
-
-            {% if model.admin_url %}
-                <td><a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a></td>
-            {% else %}
-                <td>&nbsp;</td>
-            {% endif %}
-            </tr>
-        {% endfor %}
-        </table>
-        </div>
-    {% endfor %}
-{% else %}
-    <p>{% trans "You don't have permission to edit anything." %}</p>
-{% endif %}
-</div>
+		    {% if model.admin_url %}
+		        <td><a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a></td>
+		    {% else %}
+		        <td>&nbsp;</td>
+		    {% endif %}
+		    </tr>
+		{% endfor %}
+		</table>
+		</div>
+	    {% endfor %}
+	{% else %}
+	    <p>{% trans "You don't have permission to edit anything." %}</p>
+	{% endif %}
+	</div>
 {% endblock %}
 
 {% block sidebar %}
@@ -55,7 +74,7 @@
         <h2>{% trans 'Recent Actions' %}</h2>
         <h3>{% trans 'My Actions' %}</h3>
             {% load log %}
-            
+            {% get_admin_log 10 as admin_log for_user user %}
             {% if not admin_log %}
             <p>{% trans 'None available' %}</p>
             {% else %}

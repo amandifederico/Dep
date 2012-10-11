@@ -145,9 +145,11 @@ class ProveedorAdmin(admin.ModelAdmin):
 
 class DetalleCompraInline(admin.TabularInline):
      model = Detallecompra
+     raw_id_fields = ('idarticulo',)
 
 class DetallecompraAdmin(admin.ModelAdmin):
      list_display = ('iddetcompra',)
+     
 
 class CompraAdmin(admin.ModelAdmin):
      list_display = ('fecha','observaciones','tipo','idproveedor','iddeposito','nroactuacion','nroordencompra','nroexpediente','nroremito',)
@@ -155,6 +157,7 @@ class CompraAdmin(admin.ModelAdmin):
      search_fields = ('observaciones','fecha','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      ordering = ('-fecha',)
      inlines = [DetalleCompraInline]
+     raw_id_fields = ('idproveedor',)
 
 #RAWSON
 

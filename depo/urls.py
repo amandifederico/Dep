@@ -1,5 +1,8 @@
 from django.conf.urls import patterns, include, url
-
+#
+from django.conf.urls.defaults import * 
+from django.contrib.auth.views import login, logout
+#
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 from depoapp.views import *
@@ -16,6 +19,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     (r'^listado/$',listado),
+    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^site_media/(?P<path>.*)$','django.views.static.serve',
         {'document_root': '/var/www/depo/media'}),
     (r'^static/(?P<path>.*)$','django.views.static.serve',

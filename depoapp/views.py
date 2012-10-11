@@ -24,6 +24,9 @@ from django import http
 from django.core.context_processors import csrf #para formularios
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+#from django.views.generic.list import ListView
+from django.contrib.auth.decorators import login_required
+
 
 #==========================================================================================================
 def conexion():
@@ -50,11 +53,15 @@ def generar_pdf(html):
     #return HttpResponse('Error al generar el PDF: %s' % cgi.escape(html))
 
 @csrf_exempt
+@login_required
 def listado(peticion):
     """
     Vista que retorno el template index.html
     """
     c={}
     c.update(csrf(peticion))
-
-    return render_to_response('listado.html',)
+    #cursor = conexion()
+    #lista = cursor.execute('SELECT * FROM proveedor')
+    lista = list(Proveedor.objects.all())
+    user = peticion.user
+    return render_to_response('listado.html',{'lista':lista,'user':user,},)
