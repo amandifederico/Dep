@@ -14,19 +14,22 @@
 {% block content %}
 	<div id="content-main">
 <p>asdasdasdasd </p>
+	{{campos}}
 	<div class="results">
 		<table id="result_list">
 			<thead>
 				<tr>
-					<th>Razon Social</th>
-					<th>Direccion</th>
+					{%for lc in campos%}
+						<th>{{lc}}</th>					
+					{% endfor %}
 				</tr>
 			</thead>
 			<tbody>
 				{%for list in lista%}
 					<tr class="{% cycle 'row1' 'row2' %}">
-							<td>{{list.razonsocial}}</td>
-							<td>{{list.domicilio}}</td>
+						{%for lc in campos%}
+							<td>{{list}}</td>
+						{% endfor %}
 					</tr>
 				{% endfor %}
 			</tbody>

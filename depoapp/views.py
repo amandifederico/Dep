@@ -54,14 +54,20 @@ def generar_pdf(html):
 
 @csrf_exempt
 @login_required
-def listado(peticion):
+def listado(peticion,modelo):
     """
     Vista que retorno el template index.html
     """
     c={}
     c.update(csrf(peticion))
-    #cursor = conexion()
-    #lista = cursor.execute('SELECT * FROM proveedor')
-    lista = list(Proveedor.objects.all())
+    modelo = models.get_model('depoapp',modelo)
+    campos = modelo._meta.fields
+    listCampos = list()
+    for a in campos:
+        listCampos.append(a.name)
+    lista = list(modelo.objects.all())
     user = peticion.user
-    return render_to_response('listado.html',{'lista':lista,'user':user,},)
+    return render_to_response('listado.html',{'lista':lista,'user':user,'campos':listCampos,},)
+
+
+
