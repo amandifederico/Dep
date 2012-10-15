@@ -24,6 +24,13 @@ function tiene_no_valido(texto){
 }
 
 //--------------------------------------------------------------------------------------------------------------
+function acopla(texto, campo){
+	var n = texto.concat(".",campo);
+	return n;	
+}
+
+
+//--------------------------------------------------------------------------------------------------------------
 /***
 Recibe el mes que parseo validarFecha, y devuelve la cantidad de dias que trae el mes, caso erroneo retorna -1
 ***/

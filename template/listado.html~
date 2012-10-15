@@ -15,6 +15,7 @@
 	<div id="content-main">
 <p>asdasdasdasd </p>
 	{{campos}}
+	{{modelo|lower}}
 	<div class="results">
 		<table id="result_list">
 			<thead>
@@ -27,9 +28,13 @@
 			<tbody>
 				{%for list in lista%}
 					<tr class="{% cycle 'row1' 'row2' %}">
-						{#{%for lc in campos%} #}
-							<td>{{list}}</td>
-						{#{% endfor %}#}
+							{% ifequal modelo|lower "proveedor"%}
+	 							<td>{{list.idproveedor}}</td>
+	 							<td>{{list.razonsocial}}</td>
+								<td>{{list.domicilio}}</td>
+								<td>{{list.ciudad}}</td>
+								<td>{{list.telefono}}</td>
+							{% endifequal %}
 					</tr>
 				{% endfor %}
 			</tbody>
