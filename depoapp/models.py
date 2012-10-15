@@ -114,6 +114,8 @@ class Proveedor(models.Model):
 	 verbose_name_plural ="Proveedor"
      def __unicode__(self):
          return force_unicode(self.razonsocial)
+     def get_fields(self):
+         return [(field, field.value_to_string(self)) for field in Order._meta.fields]
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------

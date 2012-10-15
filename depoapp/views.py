@@ -65,7 +65,7 @@ def listado(peticion,modelo):
     listCampos = list()
     for a in campos:
         listCampos.append(a.name)
-    lista = list(modelo.objects.all())
+    lista = list(modelo.objects.all())    
     user = peticion.user
     return render_to_response('listado.html',{'lista':lista,'user':user,'campos':listCampos,},)
 
