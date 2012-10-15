@@ -8,7 +8,7 @@
 #sudo apt-get install python-reportlab
 #sudo apt-get install python-imagin
 
-#import ho.pisa as pisa #esto hay que bajarlo de internet, se puede instalar con easy install - http://pypi.python.org/pypi/pisa/
+import ho.pisa as pisa #esto hay que bajarlo de internet, se puede instalar con easy install - http://pypi.python.org/pypi/pisa/
 import cStringIO as StringIO
 import cgi
 from django.template import RequestContext, Template, Context
@@ -70,6 +70,24 @@ def listado(peticion,Nmodelo):
     user = peticion.user
 
     return render_to_response('listado.html',{'lista':lista,'user':user,'campos':listCampos,'modelo':Nmodelo,},)
+    
+@csrf_exempt
+@login_required
+def listPdf(peticion,Nmodelo):
+    """
+    Vista que retorno el template index.html
+    """
+    c={}
+    c.update(csrf(peticion))
+    modelo = models.get_model('depoapp',Nmodelo)
+    campos = modelo._meta.fields
+    listCampos = list()
+    for a in campos:
+        listCampos.append(a.name)
+    lista = list(modelo.objects.all())    
+    user = peticion.user
+
+    return generar_pdf(render_to_response('listPdf.html',{'lista':lista,'user':user,'campos':listCampos,'modelo':Nmodelo,},))
 
 
 

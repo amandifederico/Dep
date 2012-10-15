@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     (r'^listado/(\w{3,25})$',listado),
+    (r'^listado/pdf/(\w{3,25})$',listPdf),
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^site_media/(?P<path>.*)$','django.views.static.serve',
         {'document_root': '/var/www/depo/media'}),
