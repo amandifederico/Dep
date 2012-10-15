@@ -52,22 +52,24 @@ def generar_pdf(html):
     #   return HttpResponse(result.getvalue(), mimetype ='application/pdf')
     #return HttpResponse('Error al generar el PDF: %s' % cgi.escape(html))
 
+
 @csrf_exempt
 @login_required
-def listado(peticion,modelo):
+def listado(peticion,Nmodelo):
     """
     Vista que retorno el template index.html
     """
     c={}
     c.update(csrf(peticion))
-    modelo = models.get_model('depoapp',modelo)
+    modelo = models.get_model('depoapp',Nmodelo)
     campos = modelo._meta.fields
     listCampos = list()
     for a in campos:
         listCampos.append(a.name)
     lista = list(modelo.objects.all())    
     user = peticion.user
-    return render_to_response('listado.html',{'lista':lista,'user':user,'campos':listCampos,},)
+
+    return render_to_response('listado.html',{'lista':lista,'user':user,'campos':listCampos,'modelo':Nmodelo,},)
 
 
 

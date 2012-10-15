@@ -2,6 +2,7 @@ var numeros="0123456789";
 var letras="abcdefghyjklmnñopqrstuvwxyz";
 var simbolos="¬|@·~½¬{[]}\¸°!#$%&/()=?¡¿'+-.,;:_<>*";
 //--------------------------------------------------------------------------------------------------------------
+//Evalua una cadena para ver si contiene caracteres numericos, en caso de tenerlos retorna 1, caso contrario 0
 function tiene_numeros(texto){
 	for(i=0; i<texto.length; i++){
 		if (numeros.indexOf(texto.charAt(i),0)!=-1){
@@ -10,6 +11,7 @@ function tiene_numeros(texto){
 	}
 	return 0;
 } 
+
 //--------------------------------------------------------------------------------------------------------------
 function tiene_no_valido(texto){
 	texto = texto.toLowerCase();
@@ -21,9 +23,10 @@ function tiene_no_valido(texto){
 	return 0;
 }
 
-/*
-Recibe el mes que parseo valida fecha, y devuelve la cantidad de dias que trae el mes, caso erroneo retorna -1
-*/
+//--------------------------------------------------------------------------------------------------------------
+/***
+Recibe el mes que parseo validarFecha, y devuelve la cantidad de dias que trae el mes, caso erroneo retorna -1
+***/
 function validarMes(mes,anio){
 	var dmax = -1;
 	switch (mes){
@@ -71,6 +74,9 @@ function validarMes(mes,anio){
 }
 
 //--------------------------------------------------------------------------------------------------------------
+/***
+//Determina si la fecha en su totalidad es correcta o erronea, en caso de error indica en donde se encuentran el o los mismos
+***/
 function validarFecha(anio,mes,dia){
 	var estado = -1;
 	if (tiene_no_valido(anio) == 0){
@@ -94,6 +100,9 @@ function validarFecha(anio,mes,dia){
 }
 
 //--------------------------------------------------------------------------------------------------------------
+/***
+/
+***/
 function reporteAus(){
 	//if (validarFecha(escape(anio.value),escape(mes.value),escape(dia.value)) == 1){
 	if (validarFecha($F('anio'), $F('mes'),$F('dia')) == 1){
@@ -110,6 +119,9 @@ function reporteAus(){
 }
 
 //--------------------------------------------------------------------------------------------------------------
+/***
+/
+***/
 function llamaPdf(){
 	//if (validarFecha(escape(anio.value),escape(mes.value),escape(dia.value)) == 1){
 	if (validarFecha($F('anio'), $F('mes'),$F('dia')) == 1){
@@ -126,6 +138,9 @@ function llamaPdf(){
 }
 
 //--------------------------------------------------------------------------------------------------------------
+/***
+/
+***/
 function infoAgente(nroDoc){
     //parseInt('') 
     var url="http://172.155.0.9:7000/agente/"+nroDoc;
@@ -133,18 +148,27 @@ function infoAgente(nroDoc){
     return false;
 }
 //--------------------------------------------------------------------------------------------------------------
+/***
+/
+***/
 function listaAgentesAll(){
 	var url="http://172.155.0.9:7000/agentesAll/";
 	open(url,"_self");
 	return false;
 }
 //--------------------------------------------------------------------------------------------------------------
+/***
+/
+***/
 function buscaAgentes(){
 	var url="http://172.155.0.9:7000/agentesBusc/"+$F('apellido');
 	open(url,"_self");
 	return false;
 }
 //--------------------------------------------------------------------------------------------------------------
+/***
+/
+***/
 function fliaAgente(nroDoc){
     //parseInt('') 
     var url="http://172.155.0.9:7000/familiares/"+nroDoc;
