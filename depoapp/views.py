@@ -90,4 +90,27 @@ def listPdf(peticion,Nmodelo):
     return generar_pdf(render_to_response('listPdf.html',{'lista':lista,'user':user,'campos':listCampos,'modelo':Nmodelo,},))
 
 
+def listaCompra(peticion,Nmodelo):
+
+    c={}
+    c.update(csrf(peticion))
+    modelo = models.get_model('depoapp',Nmodelo)
+    listacompra = list(Compra.objects.filter(fecha__lte='2006-01-01'))    
+    listadcompra = []
+    for a in listacompra:
+	listadcompraaux = list(Detallecompra.objects.filter(idcompra__exact=a.idcompra))
+	i=0	
+  	for b in listadcompraaux:
+		i+=0		
+		if b.idarticulo in listadcompra:
+			listadcompra[i].cantidad += b.cantidad
+		else:		
+			listadcompra.append(b)
+			listadcompra.append(b.idarticulo)
+	
+    user = peticion.user
+
+    return render_to_response('listacompra.html',{'lista':listadcompra,'user':user,},)
+
+
 
