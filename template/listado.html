@@ -13,15 +13,16 @@
 
 {% block content %}
 	<div id="content-main">
-<p>asdasdasdasd </p>
-	{{campos}}
-	{{modelo|lower}}
+
+
+	<img src="/site_media/img/icon/orig/page_white_acrobat.png"> <a href="pdf/{{modelo|lower}}">Generar PDF</a></br>
+	
 	<div class="results">
 		<table id="result_list">
 			<thead>
 				<tr>
 					{%for lc in campos%}
-						<th>{{lc}}</th>					
+						<th>{{lc}}</th>
 					{% endfor %}
 				</tr>
 			</thead>
@@ -80,7 +81,7 @@
 		</div>
 	    {% endfor %}
 	{% else %}
-	    <p>{% trans "You don't have permission to edit anything." %}</p>
+	    <p> </p>
 	{% endif %}
 	</div>
 {% endblock %}
