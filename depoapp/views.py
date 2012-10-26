@@ -96,8 +96,8 @@ def listaCompra(peticion,Nmodelo):
     c={}
     c.update(csrf(peticion))
     modelo = models.get_model('depoapp',Nmodelo)
-    
-    end_date = datetime.date(2012, 10, 26)
+    start_date = date(2012,9,26)
+    end_date = date(2012,10,26)
     listacompra = list(Compra.objects.filter(fecha__range=(start_date, end_date)))    
     listadcompra = []
     for a in listacompra:
