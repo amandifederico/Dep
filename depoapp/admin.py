@@ -74,6 +74,10 @@ class ArticulodepositoAdmin(admin.ModelAdmin):
      ordering = ('idarticulo',)
      readonly_fields = ('idarticulo','iddeposito','stock','stockentrante', 'stocksaliente','casillero','mueble','nroficha',)
 
+class VwArticulosAdmin(admin.ModelAdmin):
+     search_fields = ('descripcionitem',)
+     ordering = ('descripcionitem',)
+
 #---------------------------------------------------------------------------------------------------------------------------------------------------
 #==CIUDAD===========================================================================================================================================
 #---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -97,38 +101,50 @@ class DepositoAdmin(admin.ModelAdmin):
 
 class vwdepositoAdAdmin(admin.ModelAdmin):
      inlines = [HistorialPreciosInline]
+     search_fields = ('descripcionitem',)
+     ordering = ('descripcionitem',)
      list_display = ('descripcionitem','stock', 'stockentrante', 'stocksaliente',)
      readonly_fields = ('stock', 'stockentrante', 'stocksaliente','descripcionitem','idbarra','stmin','unidadmedida','nrocuentapatrimonial',)
 
 #RAWSON
 class vwdepositorawsonAdmin(admin.ModelAdmin):
      inlines = [HistorialPreciosrwInline]
+     search_fields = ('descripcionitem',)
+     ordering = ('descripcionitem',)
      list_display = ('descripcionitem','stock', 'stockentrante', 'stocksaliente',)
      readonly_fields = ('stock', 'stockentrante', 'stocksaliente','descripcionitem','idbarra','stmin','unidadmedida','nrocuentapatrimonial',)
 
 #ESQUEL
 class vwdepositoesquelAdmin(admin.ModelAdmin):
      inlines = [HistorialPreciosesquelInline]
+     search_fields = ('descripcionitem',)
+     ordering = ('descripcionitem',)
      list_display = ('descripcionitem','stock', 'stockentrante', 'stocksaliente',)
-readonly_fields = ('stock', 'stockentrante', 'stocksaliente','descripcionitem','idbarra','stmin','unidadmedida','nrocuentapatrimonial',)
+     readonly_fields = ('stock', 'stockentrante', 'stocksaliente','descripcionitem','idbarra','stmin','unidadmedida','nrocuentapatrimonial',)
 
 #SARMIENTO
 class vwdepositosarmientoAdmin(admin.ModelAdmin):
      inlines = [HistorialPreciossarmientoInline]
+     search_fields = ('descripcionitem',)
+     ordering = ('descripcionitem',)
      list_display = ('descripcionitem','stock', 'stockentrante', 'stocksaliente',)
-readonly_fields = ('stock', 'stockentrante', 'stocksaliente','descripcionitem','idbarra','stmin','unidadmedida','nrocuentapatrimonial',)
+     readonly_fields = ('stock', 'stockentrante', 'stocksaliente','descripcionitem','idbarra','stmin','unidadmedida','nrocuentapatrimonial',)
 
 #MADRYN
 class vwdepositomadrynAdmin(admin.ModelAdmin):
      inlines = [HistorialPreciosmadrynInline]
+     search_fields = ('descripcionitem',)
+     ordering = ('descripcionitem',)
      list_display = ('descripcionitem','stock', 'stockentrante', 'stocksaliente',)
-readonly_fields = ('stock', 'stockentrante', 'stocksaliente','descripcionitem','idbarra','stmin','unidadmedida','nrocuentapatrimonial',)
+     readonly_fields = ('stock', 'stockentrante', 'stocksaliente','descripcionitem','idbarra','stmin','unidadmedida','nrocuentapatrimonial',)
 
 #GAIMAN
 class vwdepositogaimanAdmin(admin.ModelAdmin):
      inlines = [HistorialPreciosgaimanInline]
+     search_fields = ('descripcionitem',)
+     ordering = ('descripcionitem',)
      list_display = ('descripcionitem','stock', 'stockentrante', 'stocksaliente',)
-readonly_fields = ('stock', 'stockentrante', 'stocksaliente','descripcionitem','idbarra','stmin','unidadmedida','nrocuentapatrimonial',)
+     readonly_fields = ('stock', 'stockentrante', 'stocksaliente','descripcionitem','idbarra','stmin','unidadmedida','nrocuentapatrimonial',)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------
 #==PROVEEDOR========================================================================================================================================
@@ -332,6 +348,7 @@ class DetalleDevolucionesInline(admin.TabularInline):
 class DevolucionesAdmin(admin.ModelAdmin):
      inlines = [DetalleDevolucionesInline]
      list_filter = ('iddeposito',)
+     raw_id_fields = ('idproveedor',)
 #     search_fields = ('idcompra__observacion','iddeposito__direccion')
      
 #GAIMAN
@@ -342,6 +359,7 @@ class DetalleDevolucionesGaimanInline(admin.TabularInline):
 
 class DevolucionesGaimanAdmin(admin.ModelAdmin):
      inlines = [DetalleDevolucionesGaimanInline]
+     raw_id_fields = ('idproveedor',)
 #     list_display = ('idcompra','descripcion',)
 #     search_fields = ('idcompra__observacion','iddeposito__direccion')
 
@@ -353,6 +371,7 @@ class DetalleDevolucionesEsquelInline(admin.TabularInline):
 
 class DevolucionesEsquelAdmin(admin.ModelAdmin):
      inlines = [DetalleDevolucionesEsquelInline]
+     raw_id_fields = ('idproveedor',)
 #     list_display = ('idcompra','descripcion',)
 #     search_fields = ('idcompra__observacion','iddeposito__direccion')
 
@@ -364,6 +383,7 @@ class DetalleDevolucionesRawsonInline(admin.TabularInline):
 
 class DevolucionesRawsonAdmin(admin.ModelAdmin):
      inlines = [DetalleDevolucionesRawsonInline]
+     raw_id_fields = ('idproveedor',)
 #     list_display = ('idcompra','iddeposito','descripcion',)
 #     search_fields = ('idcompra__observacion','iddeposito__direccion')
 
@@ -373,9 +393,9 @@ class DetalleDevolucionesMadrynInline(admin.TabularInline):
      model = DetalledevolucionMadryn
      raw_id_fields = ('idarticulo',)
 
-
 class DevolucionesMadrynAdmin(admin.ModelAdmin):
      inlines = [DetalleDevolucionesMadrynInline]
+     raw_id_fields = ('idproveedor',)
 #     list_display = ('idcompra','descripcion',)
 #     search_fields = ('idcompra__observacion','iddeposito__direccion')
 
@@ -388,6 +408,7 @@ class DetalleDevolucionesSarmientoInline(admin.TabularInline):
 
 class DevolucionesSarmientoAdmin(admin.ModelAdmin):
      inlines = [DetalleDevolucionesSarmientoInline]
+     raw_id_fields = ('idproveedor',)
 #     list_display = ('idcompra'	,'descripcion',)
 #     search_fields = ('idcompra__observacion','iddeposito__direccion')
 
@@ -561,7 +582,7 @@ class LogAdmin(admin.ModelAdmin):
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 admin.site.register(Articulo, ArticuloAdmin)
-admin.site.register(VwArticulos)
+admin.site.register(VwArticulos,VwArticulosAdmin)
 admin.site.register(Barras)
 admin.site.register(Cuentaspatrimoniales,CuentaspatrimonialesAdmin)
 admin.site.register(Ciudad, CiudadAdmin)
