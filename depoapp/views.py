@@ -14,6 +14,7 @@ import cgi
 from django.template import RequestContext, Template, Context
 from django.template.loader import *
 from django.http import HttpResponse
+from datetime import *
 #from reportlab.pdfgen import canvas
 #====================================================
 from depoapp.models import *
@@ -95,7 +96,9 @@ def listaCompra(peticion,Nmodelo):
     c={}
     c.update(csrf(peticion))
     modelo = models.get_model('depoapp',Nmodelo)
-    listacompra = list(Compra.objects.filter(fecha__lte='2006-01-01'))    
+    
+    end_date = datetime.date(2012, 10, 26)
+    listacompra = list(Compra.objects.filter(fecha__range=(start_date, end_date)))    
     listadcompra = []
     for a in listacompra:
 	listadcompraaux = list(Detallecompra.objects.filter(idcompra__exact=a.idcompra))
