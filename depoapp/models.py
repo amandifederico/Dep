@@ -459,11 +459,11 @@ class Compra(models.Model):
      fecha = models.DateField()
      idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor',verbose_name='Proveedor')
      iddeposito = models.ForeignKey(Deposito, db_column='idDeposito',verbose_name='Depósito')
-     nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación')
+     nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación', blank=True)
      nroremito = models.CharField(max_length=200,db_column='nroRemito',verbose_name='Nro.Remito')
-     nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra')
-     nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente')
-     observaciones = models.CharField(max_length=200)
+     nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra', blank=True)
+     nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente', blank=True)
+     observaciones = models.CharField(max_length=200, blank=True)
      class Meta:
          db_table = u'compra'
          verbose_name_plural ="Compra"
@@ -478,11 +478,11 @@ class VwComprasrw(models.Model):
     fecha = models.DateField()
     idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor',verbose_name='Proveedor')
     iddeposito = models.ForeignKey(Deposito, db_column='idDeposito', default=5, editable=False,verbose_name='Depósito')
-    nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación')
+    nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación', blank=True)
     nroremito = models.CharField(max_length=200,db_column='nroRemito',verbose_name='Nro.Remito')
-    nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra')
-    nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente')
-    observaciones = models.CharField(max_length=200)
+    nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra', blank=True)
+    nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente', blank=True)
+    observaciones = models.CharField(max_length=200, blank=True)
     class Meta:
         db_table = u'VW_comprasRw'
         verbose_name_plural ="Compras Rawson"
@@ -496,11 +496,11 @@ class VwComprassarmiento(models.Model):
     fecha = models.DateField()
     idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor',verbose_name='Proveedor')
     iddeposito = models.ForeignKey(Deposito, db_column='idDeposito', default=1, editable=False,verbose_name='Depósito')
-    nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación')
+    nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación', blank=True)
     nroremito = models.CharField(max_length=200,db_column='nroRemito',verbose_name='NroRemito')
-    nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra')
-    nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente')
-    observaciones = models.CharField(max_length=200)
+    nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra', blank=True)
+    nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente', blank=True)
+    observaciones = models.CharField(max_length=200, blank=True)
     class Meta:
         db_table = u'VW_comprasSarmiento'
         verbose_name_plural ="Compra Sarmiento"
@@ -515,11 +515,11 @@ class VwCompraspmadryn(models.Model):
     fecha = models.DateField()
     idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor',verbose_name='Proveedor')
     iddeposito = models.ForeignKey(Deposito, db_column='idDeposito', default=2, editable=False,verbose_name='Depósito')
-    nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación')
+    nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación', blank=True)
     nroremito = models.CharField(max_length=200,db_column='nroRemito',verbose_name='Nro.Remito')
-    nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra')
-    nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente')
-    observaciones = models.CharField(max_length=200)
+    nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra', blank=True)
+    nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente', blank=True)
+    observaciones = models.CharField(max_length=200, blank=True)
     class Meta:
         db_table = u'VW_comprasMadryn'
         verbose_name_plural ="Compra Madryn"
@@ -533,11 +533,11 @@ class VwComprasesquel(models.Model):
     fecha = models.DateField()
     idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor',verbose_name='Proveedor')
     iddeposito = models.ForeignKey(Deposito, db_column='idDeposito', default=3, editable=False,verbose_name='Depósito')
-    nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación')
+    nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación', blank=True)
     nroremito = models.CharField(max_length=200,db_column='nroRemito',verbose_name='Nro.Remito')
-    nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra')
-    nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente')
-    observaciones = models.CharField(max_length=200)
+    nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra', blank=True)
+    nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente', blank=True)
+    observaciones = models.CharField(max_length=200, blank=True)
     class Meta:
         db_table = u'VW_comprasEsquel'
         verbose_name_plural ="Compra Esquel"
@@ -551,11 +551,11 @@ class VwComprasgaiman(models.Model):
     fecha = models.DateField()
     idproveedor = models.ForeignKey(Proveedor,db_column='idProveedor', verbose_name='Proveedor')
     iddeposito = models.ForeignKey(Deposito, db_column='idDeposito', default=4, editable=False,verbose_name='Depósito')
-    nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación')
+    nroactuacion = models.CharField(max_length=200,db_column='nroActuacion',verbose_name='Nro.Actuación', blank=True)
     nroremito = models.CharField(max_length=200,db_column='nroRemito',verbose_name='Nro.Remito')
-    nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra')
-    nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente')
-    observaciones = models.CharField(max_length=200)
+    nroordencompra = models.CharField(max_length=200,db_column='nroOrdenCompra',verbose_name='OrdenCompra', blank=True)
+    nroexpediente = models.CharField(max_length=200,db_column='nroExpediente',verbose_name='Expediente', blank=True)
+    observaciones = models.CharField(max_length=200, blank=True)
     class Meta:
         db_table = u'VW_comprasGaiman'
         verbose_name_plural ="Compra Gaiman"

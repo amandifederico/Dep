@@ -74,6 +74,10 @@ class ArticulodepositoAdmin(admin.ModelAdmin):
      ordering = ('idarticulo',)
      readonly_fields = ('idarticulo','iddeposito','stock','stockentrante', 'stocksaliente','casillero','mueble','nroficha',)
 
+class VwArticulosAdmin(admin.ModelAdmin):
+     search_fields = ('idarticulo',)
+     ordering = ('idarticulo',)
+
 #---------------------------------------------------------------------------------------------------------------------------------------------------
 #==CIUDAD===========================================================================================================================================
 #---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -145,16 +149,19 @@ class ProveedorAdmin(admin.ModelAdmin):
 
 class DetalleCompraInline(admin.TabularInline):
      model = Detallecompra
+     raw_id_fields = ('idarticulo',)
 
 class DetallecompraAdmin(admin.ModelAdmin):
      list_display = ('iddetcompra',)
+     
 
 class CompraAdmin(admin.ModelAdmin):
      list_display = ('fecha','observaciones','tipo','idproveedor','iddeposito','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      list_filter = ('iddeposito','tipo')
-     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     search_fields = ('observaciones','fecha','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      ordering = ('-fecha',)
      inlines = [DetalleCompraInline]
+     raw_id_fields = ('idproveedor',)
 
 #RAWSON
 
@@ -169,7 +176,7 @@ class DetallecomprarwAdmin(admin.ModelAdmin):
 class CompraAdminrw(admin.ModelAdmin):
      list_display = ('fecha','observaciones','tipo','idproveedor','iddeposito','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      list_filter = ('iddeposito','tipo')
-     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     search_fields = ('observaciones','fecha','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      ordering = ('-fecha',)
      inlines = [DetalleComprarwInline]
      raw_id_fields = ('idproveedor',)
@@ -187,7 +194,7 @@ class DetallecomprasarmientoAdmin(admin.ModelAdmin):
 class CompraAdminsarmiento(admin.ModelAdmin):
      list_display = ('fecha','observaciones','tipo','idproveedor','iddeposito','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      list_filter = ('iddeposito','tipo')
-     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     search_fields = ('observaciones','fecha','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      ordering = ('-fecha',)
      inlines = [DetalleComprasarmientoInline]   
      raw_id_fields = ('idproveedor',)
@@ -204,7 +211,7 @@ class DetallecompramadrynAdmin(admin.ModelAdmin):
 class CompraAdminpmadryn(admin.ModelAdmin):
      list_display = ('fecha','observaciones','tipo','idproveedor','iddeposito','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      list_filter = ('iddeposito','tipo')
-     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     search_fields = ('observaciones','fecha','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      ordering = ('-fecha',)
      inlines = [DetalleCompramadrynInline]
      raw_id_fields = ('idproveedor',)
@@ -223,7 +230,7 @@ class DetallecompragaimanAdmin(admin.ModelAdmin):
 class CompraAdmingaiman(admin.ModelAdmin):
      list_display = ('fecha','observaciones','tipo','idproveedor','iddeposito','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      list_filter = ('iddeposito','tipo')
-     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     search_fields = ('observaciones','fecha','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      ordering = ('fecha',)
      inlines = [DetalleCompragaimanInline]    
      raw_id_fields = ('idproveedor',)
@@ -241,7 +248,7 @@ class DetallecompraesquelAdmin(admin.ModelAdmin):
 class CompraAdminesquel(admin.ModelAdmin):
      list_display = ('fecha','observaciones','tipo','idproveedor','iddeposito','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      list_filter = ('iddeposito','tipo')
-     search_fields = ('observaciones','fecha','nroordencompra','nroexpediente','nroremito',)
+     search_fields = ('observaciones','fecha','nroactuacion','nroordencompra','nroexpediente','nroremito',)
      ordering = ('fecha',)
      inlines = [DetalleCompraesquelInline]    
      raw_id_fields = ('idproveedor',)     
@@ -558,7 +565,7 @@ class LogAdmin(admin.ModelAdmin):
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 admin.site.register(Articulo, ArticuloAdmin)
-admin.site.register(VwArticulos)
+admin.site.register(VwArticulos,VwArticulosAdmin)
 admin.site.register(Barras)
 admin.site.register(Cuentaspatrimoniales,CuentaspatrimonialesAdmin)
 admin.site.register(Ciudad, CiudadAdmin)
