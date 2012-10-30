@@ -96,21 +96,28 @@ def listaCompra(peticion,Nmodelo):
     c={}
     c.update(csrf(peticion))
     modelo = models.get_model('depoapp',Nmodelo)
-    
-    end_date = datetime.date(2012, 10, 26)
+    start_date = date(2005, 1, 1)
+    end_date = date(2012, 10, 26)
     listacompra = list(Compra.objects.filter(fecha__range=(start_date, end_date)))    
     listadcompra = []
     for a in listacompra:
 	listadcompraaux = list(Detallecompra.objects.filter(idcompra__exact=a.idcompra))
-	i=0	
-  	for b in listadcompraaux:
-		i+=0		
-		if b.idarticulo in listadcompra:
-			listadcompra[i].cantidad += b.cantidad
-		else:		
+	if len(listadcompra) == 0:
+		for b in listadcompraaux:
 			listadcompra.append(b)
-			listadcompra.append(b.idarticulo)
+	else:	
+		for b in listadcompraaux:
+			w = 0
+			for c in listadcompra:
+				if c.idarticulo == b.idarticulo:
+					c.cantidad += b.cantidad
+					w = 1				
+			if w == 0:
+				listadcompra.append(b)
 	
+	
+		
+		
     user = peticion.user
 
     return render_to_response('listacompra.html',{'lista':listadcompra,'user':user,},)
