@@ -68,7 +68,7 @@ class ArticuloAdmin(admin.ModelAdmin):
 
 class ArticulodepositoAdmin(admin.ModelAdmin):
      #inlines = [HistorialPreciosInline]
-     list_display = ['idarticulo','iddeposito','stock','stockentrante', 'stocksaliente','casillero','mueble','nroficha']
+     list_display = ['idarticulo','stock','stockentrante', 'stocksaliente','nroficha','casillero','mueble']
      list_filter = ('iddeposito',)
      search_fields = ('idarticulo__descripcionitem','iddeposito__direccion',)
      ordering = ('idarticulo',)

@@ -91,11 +91,10 @@ def listPdf(peticion,Nmodelo):
     return generar_pdf(render_to_response('listPdf.html',{'lista':lista,'user':user,'campos':listCampos,'modelo':Nmodelo,},))
 
 
-def listaCompra(peticion,Nmodelo):
+def listaCompra(peticion):
 
     c={}
     c.update(csrf(peticion))
-    modelo = models.get_model('depoapp',Nmodelo)
     start_date = date(2005, 1, 1)
     end_date = date(2012, 10, 26)
     listacompra = list(Compra.objects.filter(fecha__range=(start_date, end_date)))    
@@ -121,6 +120,74 @@ def listaCompra(peticion,Nmodelo):
     user = peticion.user
 
     return render_to_response('listacompra.html',{'lista':listadcompra,'user':user,},)
+
+def listaSalida(peticion):
+
+    c={}
+    c.update(csrf(peticion))
+    start_date = date(2005, 1, 1)
+    end_date = date(2012, 10, 26)
+    listasalida = list(Salida.objects.filter(fecha__range=(start_date, end_date)).filter(iddeposito__exact=3))   
+    listadsalida = []
+    for a in listasalida:
+	listadsalidaaux = list(Detallesalida.objects.filter(idsalida__exact=a.idsalida))
+	if len(listadsalida) == 0:
+		for b in listadsalidaaux:
+			listadsalida.append(b)
+	else:	
+		for b in listadsalidaaux:
+			w = 0
+			for c in listadsalida:
+				if c.idarticulo == b.idarticulo:
+					c.cantidad += b.cantidad
+					w = 1				
+			if w == 0:
+				listadsalida.append(b)
+	
+	
+		
+		
+    user = peticion.user
+
+    return render_to_response('listasalida.html',{'lista':listadsalida,'user':user,},)
+
+def listaTransf(peticion):
+
+    c={}
+    c.update(csrf(peticion))
+    start_date = date(2005, 1, 1)
+    end_date = date(2012, 10, 31)
+    listatransf = list(Transferencia.objects.filter(fechaentrada__range=(start_date, end_date)))    
+    listadtransf = []
+    lista2dtransf = []
+    for a in listatransf:
+	listadtransfaux = list(Detalletrasferencia.objects.filter(idtransferencia__exact=a.idtransferencia))
+	if len(listadtransf) == 0:
+		for b in listadtransfaux:
+			listadtransf.append(b)
+	else:	
+		for b in listadtransfaux:
+			w = 0
+			for c in listadtransf:
+				if c.idarticulo == b.idarticulo:
+					c.cantidadconfirmada += b.cantidadconfirmada
+					c.cantidad += b.cantidad
+					w = 1				
+			if w == 0:
+				listadtransf.append(b)
+				lista2dtransf.append([b,a.depositoentrada,a.depositosalida])
+	
+	
+		
+		
+    user = peticion.user
+
+    return render_to_response('listatransf.html',{'lista':listadtransf,'lista2':lista2dtransf,'user':user,},)
+
+
+
+
+
 
 
 
