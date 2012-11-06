@@ -64,9 +64,9 @@ class VwArticulos(models.Model):
      idarticulo = models.AutoField(primary_key=True, db_column='idArticulo',verbose_name='Artículo')
      nrocuentapatrimonial = models.ForeignKey(Cuentaspatrimoniales, db_column='nroCuentaPatrimonial',verbose_name='CtaPatrimonial') 
      descripcionitem = models.CharField(max_length=200, db_column='descripcionItem', verbose_name=u'Descripción') 
-     stmin = models.SmallIntegerField(db_column='stMin', verbose_name='Stock Minimo')
+     stmin = models.SmallIntegerField(db_column='stMin', verbose_name='Stock Minimo',default = 0)
      idbarra = models.ForeignKey(Barras, db_column='idBarra',verbose_name='Código de barra', blank=True, default = 0) 
-     unidadmedida = models.ForeignKey(Unidadesmedidas, db_column='unidadMedida', verbose_name='Unidad Medida', blank=True)
+     unidadmedida = models.ForeignKey(Unidadesmedidas, db_column='unidadMedida', verbose_name='Unidad Medida')
      class Meta:
         db_table = u'VW_articulos'
         verbose_name_plural ="Artículos - (Altas, Bajas, Modificaciones)"
@@ -832,8 +832,8 @@ class Detalledevolucion(models.Model):
          
 class Articulodeposito(models.Model):
      idarticulodeposito = models.AutoField(primary_key=True, db_column='idArticuloDeposito',verbose_name = 'Art.Depósito')
-     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo',verbose_name='Artículo') # Field name made lowercase.
-     iddeposito = models.ForeignKey(Deposito, db_column='idDeposito',verbose_name='Depósito') # Field name made lowercase.
+     idarticulo = models.ForeignKey(Articulo, db_column='idArticulo',verbose_name='Articulo') # Field name made lowercase.
+     iddeposito = models.ForeignKey(Deposito, db_column='idDeposito',verbose_name='Deposito') # Field name made lowercase.
      stock = models.FloatField()
      stockentrante = models.FloatField(db_column='stockEntrante',verbose_name='StockEntrada')
      stocksaliente = models.FloatField(db_column='stockSaliente',verbose_name='StockSalida')

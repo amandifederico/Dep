@@ -62,13 +62,14 @@ class HistorialPreciosmadrynInline(admin.TabularInline):
 #class ArticuloAdmin(ReadPermissionModelAdmin):
 class ArticuloAdmin(admin.ModelAdmin):
      inlines = [HistorialPreciosArticuloInline]
-     list_display = ['descripcionitem','stmin']
+     list_display = ['descripcionitem']
      search_fields = ['descripcionitem','idbarra__idbarra']
      readonly_fields = ('idarticulo','nrocuentapatrimonial','descripcionitem','stmin','idbarra','unidadmedida',)
 
 class ArticulodepositoAdmin(admin.ModelAdmin):
      #inlines = [HistorialPreciosInline]
-     list_display = ['idarticulo','iddeposito','stock','stockentrante', 'stocksaliente','casillero','mueble','nroficha']
+     #list_display = ['idarticulo','iddeposito','stock','stockentrante', 'stocksaliente','casillero','mueble','nroficha']
+
      list_filter = ('iddeposito',)
      search_fields = ('idarticulo__descripcionitem','iddeposito__direccion',)
      ordering = ('idarticulo',)
@@ -77,6 +78,7 @@ class ArticulodepositoAdmin(admin.ModelAdmin):
 class VwArticulosAdmin(admin.ModelAdmin):
      search_fields = ('descripcionitem',)
      ordering = ('descripcionitem',)
+     raw_id_fields = ('idbarra','nrocuentapatrimonial')
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------
 #==CIUDAD===========================================================================================================================================
