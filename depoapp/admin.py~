@@ -68,8 +68,12 @@ class ArticuloAdmin(admin.ModelAdmin):
 
 class ArticulodepositoAdmin(admin.ModelAdmin):
      #inlines = [HistorialPreciosInline]
+<<<<<<< HEAD
      #list_display = ['idarticulo','iddeposito','stock','stockentrante', 'stocksaliente','casillero','mueble','nroficha']
 
+=======
+     list_display = ['idarticulo__descripcionitem','stock','stockentrante', 'stocksaliente','nroficha','casillero','mueble']
+>>>>>>> 0538c50b6862f313634dc85b4169b72c6b544db3
      list_filter = ('iddeposito',)
      search_fields = ('idarticulo__descripcionitem','iddeposito__direccion',)
      ordering = ('idarticulo',)
@@ -78,7 +82,10 @@ class ArticulodepositoAdmin(admin.ModelAdmin):
 class VwArticulosAdmin(admin.ModelAdmin):
      search_fields = ('descripcionitem',)
      ordering = ('descripcionitem',)
+<<<<<<< HEAD
      raw_id_fields = ('idbarra','nrocuentapatrimonial')
+=======
+>>>>>>> 0538c50b6862f313634dc85b4169b72c6b544db3
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------
 #==CIUDAD===========================================================================================================================================
