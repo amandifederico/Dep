@@ -70,7 +70,25 @@ def listado(peticion,Nmodelo):
     user = peticion.user
 
     return render_to_response('listado.html',{'lista':lista,'user':user,'campos':listCampos,'modelo':Nmodelo,},)
+#--------------------------------------------------------------------------------------------------------------------------
     
+@csrf_exempt
+@login_required
+def salida(peticion):
+    
+    c={}
+    c.update(csrf(peticion))
+    modelo = models.get_model('depoapp',"Salida")
+    campos = modelo._meta.fields
+    listCampos = list()
+    for a in campos:
+        listCampos.append(a.name)
+    lista = list(modelo.objects.all())    
+    user = peticion.user
+
+    return render_to_response('listado.html',{'lista':lista,'user':user,'campos':listCampos,'modelo':Nmodelo,},)    
+    
+#--------------------------------------------------------------------------------------------------------------------------    
 @csrf_exempt
 @login_required
 def listPdf(peticion,Nmodelo):
