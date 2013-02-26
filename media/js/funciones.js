@@ -182,3 +182,186 @@ function fliaAgente(nroDoc){
     open(url,"_self");
     return false;
 }
+
+//-------------------------------------------------------------------------------------------
+function generarPdf(){
+    
+    var url = document.location.href; 
+    partes = url.split('/');
+    
+    p1=partes[partes.length-2];	//numero compra
+    p2=partes[partes.length-3];
+    p3=partes[partes.length-4];
+    p4=partes[partes.length-5];
+    p5=partes[partes.length-6];
+    
+    //alert("p1:"+p1);
+    
+        
+    if (p1== "add"){
+	alert("Presione Guardar y Continuar Editando - Para poder generar el Pdf -");
+	return false;
+    }else{
+      
+	url= p5+"/"+p4+"/"+p3+"/"+p2;
+		
+	// COMPRAS ********************************************************
+	if ((p2== "compra") || (p2== "vwcomprasesquel") || (p2== "vwcomprasgaiman") ||
+	(p2== "vwcompraspmadryn") || (p2== "vwcomprassarmiento") || (p2== "vwcomprasrw")){
+	    alert("entre a compras");
+	    var destino="http://deponew.django/pdfcompra/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// ARTICULOS ********************************************************
+	if ((p2== "articulo") || (p2== "vwarticulos")){
+	  
+	    var destino="http://deponew.django/pdfarticulo/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// ARTICULOS  Deposito********************************************************
+	if (p2== "articulodepositoad") {
+	    var destino="http://deponew.django/pdfarticulodepositoad/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// ARTICULOS  Deposito CIUDADES*******************************************************
+	
+	if (p2== "articulodepositoesquel"){
+	    aux = 3; 
+	    var destino="http://deponew.django/pdfarticulodeposito/"+p1+"/"+aux;
+	    open(destino,"_self");
+	    return false;
+	} 
+	  
+	  
+	if (p2== "articulodepositogaiman"){
+	    aux = 4;
+	    var destino="http://deponew.django/pdfarticulodeposito/"+p1+"/"+aux;
+	    open(destino,"_self");
+	    return false;
+	} 
+	  
+	  	  
+	if (p2== "articulodepositomadryn"){
+	    aux = 2;
+	    var destino="http://deponew.django/pdfarticulodeposito/"+p1+"/"+aux;
+	    open(destino,"_self");
+	    return false;
+	} 
+	  
+	if (p2== "articulodepositorawson"){
+	    aux = 5;
+	    var destino="http://deponew.django/pdfarticulodeposito/"+p1+"/"+aux;
+	    open(destino,"_self");
+	    return false;
+	} 
+	  
+	  
+	if (p2== "articulodepositosarmiento"){
+	    aux = 1;
+	    var destino="http://deponew.django/pdfarticulodeposito/"+p1+"/"+aux;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	
+	// BARRAS ********************************************************
+	if (p2== "barras"){
+	  
+	    var destino="http://deponew.django/pdfbarra/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// CIUDAD ********************************************************
+	if (p2== "ciudad"){
+	   
+	    var destino="http://deponew.django/pdfciudad/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// COMPRAS ********************************************************
+	if ((p2== "compra") || (p2== "vwcomprasesquel") || (p2== "vwcompraspmadryn") ||
+	(p2== "vwcomprassarmiento") || (p2== "vwcomprasrw") || (p2== "vwcomprasgaiman")){
+	  
+	    var destino="http://deponew.django/pdfcompra/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// CUENTAS PATRIMONIALES ********************************************************
+	if (p2== "cuentaspatrimoniales"){
+	  
+	    var destino="http://deponew.django/pdfctapatrimonial/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// DEPOSITO ********************************************************
+	if (p2== "deposito"){
+	  
+	    var destino="http://deponew.django/pdfdeposito/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// DETALLE COMPRA ********************************************************
+	if (p2== "detallecompra"){
+	  	  
+	    var destino="http://deponew.django/pdfdetallecompra/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// DEVOLUCIONES ********************************************************
+	if ((p2== "devoluciones") || (p2== "devolucionesquel") || (p2== "devoluciongaiman") || (p2== "devolucionmadryn") ||
+	(p2== "devolucionrw") || (p2== "devolucionsarmiento")){
+	  	  
+	    var destino="http://deponew.django/pdfdevoluciones/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// LOGS ********************************************************
+	if (p2== "log"){
+	  	  
+	    var destino="http://deponew.django/pdflog/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// PROVEEDOR ********************************************************
+	if (p2== "proveedor"){
+	  	  
+	    var destino="http://deponew.django/pdfproveedor/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// SALIDA ********************************************************
+	if ((p2== "salida") || (p2== "vwsalidaesquel") || (p2== "vwsalidagaiman") || (p2== "vwsalidamadryn") || 
+	(p2== "vwsalidarw") || (p2== "vwsalidasarmiento")){
+	  	  
+	    var destino="http://deponew.django/pdfsalida/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	
+	// TRANSFERENCIA ********************************************************
+	if ((p2== "transferencia") || (p2== "vwtransfentrw") || (p2== "vwtransfentesquel") || (p2== "vwtransfentgaiman") || (p2== "vwtransfentmadryn") || (p2== "vwtransfentsarmiento")
+	|| (p2== "vwtransfsalesquel") || (p2== "vwtransfsalgaiman") || (p2== "vwtransfsalmadryn") || (p2== "vwtransfsalrw") || (p2== "vwtransfsalsarmiento")){
+	  	  
+	    var destino="http://deponew.django/pdftransferencia/"+p1;
+	    open(destino,"_self");
+	    return false;
+	}
+	alert("Sin Funcionalidad");
+	return false;
+    }  
+}
