@@ -29,6 +29,8 @@ DATABASES = {
 # system time zone.
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
+SESSION_COOKIE_AGE = 1800
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'es-AR'
