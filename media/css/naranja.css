@@ -1,0 +1,15 @@
+table
+{
+	border: 0,1;
+}
+th 
+{
+	padding-top: 2px;
+}
+td
+{
+	padding-top: 2px;
+}
+tbody th,td{
+	padding-top: 2px;
+}

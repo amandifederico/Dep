@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django import forms
-
 from django.utils.encoding import force_unicode
 
 # Create your models here.
@@ -81,7 +80,7 @@ class ArticuloDepositoAd(models.Model):
 
      class Meta:
          db_table = u'depoAdmin'
-         verbose_name_plural ="Articulos (Stock depositos)"
+         verbose_name_plural ="Listado Articulos (Stock depositos)"
      def __unicode__(self):
          return force_unicode(self.idarticulo)
 
@@ -274,14 +273,14 @@ class Articulo(models.Model):
      descripcionitem = models.CharField(max_length=200, db_column='descripcionItem', verbose_name=u'Descripción') 
      idbarra = models.ForeignKey(Barras, db_column='idBarra',verbose_name='Código de barra', blank=True, default = 0) 
      unidadmedida = models.ForeignKey(Unidadesmedidas, db_column='unidadMedida', verbose_name='Unidad Medida', blank=True) 
-     equivalencia = models.CharField(max_length=200, db_column='equivalencia', verbose_name=u'Equivalencia')
+     equivalencia = models.CharField(max_length=200, db_column='equivalencia', blank=True, verbose_name=u'Equivalencia')
      class Meta:
         db_table = u'articulo'
         verbose_name_plural ="Listado de Artículos"
      def __unicode__(self):
         return force_unicode(self.descripcionitem)
      def get_unidadmedida(self):
-        return '%s'%(self.unidadmedida)
+	return '%s'%(self.unidadmedida)
      get_unidadmedida.short_description = 'Unidad Medida'
 
 class VwArticulos(models.Model):
@@ -290,7 +289,7 @@ class VwArticulos(models.Model):
      descripcionitem = models.CharField(max_length=200, db_column='descripcionItem', verbose_name=u'Descripción') 
      idbarra = models.ForeignKey(Barras, db_column='idBarra',verbose_name='Código de barra', blank=True, default = 0, null=True) 
      unidadmedida = models.ForeignKey(Unidadesmedidas, db_column='unidadMedida', verbose_name='Unidad Medida')
-     equivalencia = models.CharField(max_length=200, db_column='equivalencia', verbose_name=u'Equivalencia')
+     equivalencia = models.CharField(max_length=200, db_column='equivalencia', verbose_name=u'Equivalencia', blank=True)
      class Meta:
         db_table = u'VW_articulos'
         verbose_name_plural ="Artículo - (Altas, Bajas, Modificaciones)"
@@ -352,7 +351,9 @@ class Transferencia(models.Model):
      depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOut',verbose_name='DepoSalida') 
      confirmado = models.BooleanField(default=False)
      depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoIn',verbose_name='DepoEntrada') 
-     
+     entrega = models.CharField(max_length=200, db_column='entrega', blank=True, verbose_name='Entregado por')
+     recibe  = models.CharField(max_length=200, db_column='recibe', blank=True, verbose_name='Recibido por')
+
      class Meta:
         db_table = u'transferencia'
 	verbose_name_plural ="Transferencia"
@@ -384,6 +385,8 @@ class VwTransfEntRw(models.Model):
     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntRw',editable=False,verbose_name='Depo.Salida') 
     confirmado = models.BooleanField(default=False)
     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntRw',editable=False,verbose_name='Depo.Entrada') 
+    #entrega = models.CharField(max_length=200, db_column='entrega', blank=True, verbose_name='Entregado por', editable=False, default='-')
+    recibe  = models.CharField(max_length=200, db_column='recibe', blank=False, verbose_name='Recibido por' )
     class Meta:
         db_table = u'VW_transfEntRw'
         verbose_name_plural ="Transferencias Entrada Rawson"
@@ -397,6 +400,8 @@ class VwTransfSalRw(models.Model):
     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfSalRw', default=5, editable=False,verbose_name='Depo.Salida') 
     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfSalRw',verbose_name='Depo.Entrada') 
     confirmado = models.BooleanField(default=False)
+    entrega = models.CharField(max_length=200, db_column='entrega', blank=False, verbose_name='Entregado por')
+    #recibe  = models.CharField(max_length=200, db_column='recibe', blank=True, verbose_name='Recibido por', editable=False, default='-')
     class Meta:
         db_table = u'transfSalRw'
         verbose_name_plural ="Transferencias Salida Rawson"
@@ -445,6 +450,8 @@ class VwTransfEntMadryn(models.Model):
     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntMadryn',editable=False,verbose_name='Depo.Salida') 
     confirmado = models.BooleanField(default=False)
     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntMadryn',editable=False,verbose_name='Depo.Entrada') 
+    #entrega = models.CharField(max_length=200, db_column='entrega', blank=True, verbose_name='Entregado por', editable=False, default='-')
+    recibe  = models.CharField(max_length=200, db_column='recibe', blank=False, verbose_name='Recibido por' )
     class Meta:
         db_table = u'VW_transfEntMadryn'
         verbose_name_plural ="Transferencias Entrada Madryn"
@@ -458,7 +465,8 @@ class VwTransfSalMadryn(models.Model):
     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfSalMadryn',default=2, editable=False,verbose_name='Depo.Salida') 
     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfSalMadryn',verbose_name='Depo.Entrada') 
     confirmado = models.BooleanField(default=False)
-
+    entrega = models.CharField(max_length=200, db_column='entrega', blank=False, verbose_name='Entregado por')
+    #recibe  = models.CharField(max_length=200, db_column='recibe', blank=True, verbose_name='Recibido por', editable=False, default='-')
     class Meta:
         db_table = u'transfSalMadryn'
         verbose_name_plural ="Transferencias Salida Madryn"
@@ -508,6 +516,9 @@ class VwTransfEntGaiman(models.Model):
     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntGaiman',editable=False,verbose_name='Depo.Salida') 
     confirmado = models.BooleanField(default=False)
     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntGaiman',editable=False,verbose_name='Depo.Entrada') 
+    #entrega = models.CharField(max_length=200, db_column='entrega', blank=True, verbose_name='Entregado por', editable=False, default='-')
+    recibe  = models.CharField(max_length=200, db_column='recibe', blank=False, verbose_name='Recibido por' )
+
     class Meta:
         db_table = u'VW_transfEntGaiman'
         verbose_name_plural ="Transferencias Entrada Gaiman"
@@ -521,6 +532,8 @@ class VwTransfSalGaiman(models.Model):
     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfSalGaiman',default=4, editable=False,verbose_name='Depo.Salida') 
     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfSalGaiman',verbose_name='Depo.Entrada') 
     confirmado = models.BooleanField(default=False)
+    entrega = models.CharField(max_length=200, db_column='entrega', blank=False, verbose_name='Entregado por')
+    #recibe  = models.CharField(max_length=200, db_column='recibe', blank=True, verbose_name='Recibido por', editable=False, default='-')
     class Meta:
         db_table = u'transfSalGaiman'
         verbose_name_plural ="Transferencias Salida Gaiman"
@@ -535,6 +548,7 @@ class DetalleTransfEntGaiman(models.Model):
      cantidad = MinMaxFloat(max_value=1000000000000, min_value=0.0)
      cantidadconfirmada = MinMaxFloat(max_value=10000000000000, min_value=0.0, db_column='cantidadConfirmada',verbose_name='Cant.Confirmada')
      confirmado = models.BooleanField()
+
      class Meta:
          db_table = u'detalleTrasferencia'
 	 verbose_name_plural ="Detalle Transferencia Entrada Gaiman"
@@ -569,6 +583,8 @@ class VwTransfEntSarmiento(models.Model):
     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntSarmiento',editable=False,verbose_name='Depo.Salida') 
     confirmado = models.BooleanField(default=False)
     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntSarmiento',editable=False,verbose_name='Depo.Entrada') 
+    #entrega = models.CharField(max_length=200, db_column='entrega', blank=True, verbose_name='Entregado por', editable=False, default='-')
+    recibe  = models.CharField(max_length=200, db_column='recibe', blank=False, verbose_name='Recibido por' )
     class Meta:
         db_table = u'VW_transfEntSarmiento'
         verbose_name_plural ="Transferencias Entrada Sarmiento"
@@ -582,6 +598,8 @@ class VwTransfSalSarmiento(models.Model):
     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfSalSarmiento',default=1, editable=False,verbose_name='Depo.Salida') 
     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfSalSarmiento',verbose_name='Depo.Entrada') 
     confirmado = models.BooleanField(default=False) 
+    entrega = models.CharField(max_length=200, db_column='entrega', blank=False, verbose_name='Entregado por')
+    #recibe  = models.CharField(max_length=200, db_column='recibe', blank=True, verbose_name='Recibido por', editable=False, default='-')
     class Meta:
         db_table = u'transfSalSarmiento'
         verbose_name_plural ="Transferencias Salida Sarmiento"
@@ -596,6 +614,7 @@ class DetalleTransfEntSarmiento(models.Model):
      cantidad = MinMaxFloat(max_value=1000000000000, min_value=0.0)
      cantidadconfirmada = MinMaxFloat(max_value=10000000000000, min_value=0.0, db_column='cantidadConfirmada',verbose_name='Cant.Confirmada')
      confirmado = models.BooleanField()
+
      class Meta:
          db_table = u'detalleTrasferencia'
 	 verbose_name_plural ="Detalle Transferencia Entrada Sarmiento"
@@ -627,7 +646,9 @@ class VwTransfEntEsquel(models.Model):
     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfEntEsquel',editable=False,verbose_name='Depo.Salida') 
     confirmado = models.BooleanField(default=False)
     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfEntEsquel',editable=False,verbose_name='Depo.Entrada') 
-   
+    #entrega = models.CharField(max_length=200, db_column='entrega', blank=True, verbose_name='Entregado por', editable=False, default='-')
+    recibe  = models.CharField(max_length=200, db_column='recibe', blank=False, verbose_name='Recibido por' )
+
     class Meta:
         db_table = u'VW_transfEntEsquel'
         verbose_name_plural ="Transferencias Entrada Esquel"
@@ -641,7 +662,8 @@ class VwTransfSalEsquel(models.Model):
     depositoentrada = models.ForeignKey(Deposito,db_column='depositoEntrada', related_name = 'depoInTransfSalEsquel',verbose_name='Depo.Entrada') 
     depositosalida = models.ForeignKey(Deposito, db_column='depositoSalida', related_name = 'depoOutTransfSalEsquel',default=3, editable=False,verbose_name='Depo.Salida') 
     confirmado = models.BooleanField(default=False)
- 
+    entrega = models.CharField(max_length=200, db_column='entrega', blank=False, verbose_name='Entregado por')
+    #recibe  = models.CharField(max_length=200, db_column='recibe', blank=True, verbose_name='Recibido por', editable=False, default='-')
     class Meta:
         db_table = u'transfSalEsquel'
         verbose_name_plural ="Transferencias Salida Esquel"
@@ -837,6 +859,7 @@ class Detallecompramadryn(models.Model):
      idarticulo = models.ForeignKey(Articulo, db_column='idArticulo',verbose_name='Artículo')
      cantidad = MinMaxFloat(max_value=1000000000000, min_value=0.0)
      preciounitario = models.CharField(max_length=200, db_column='precioUnitario',verbose_name='PrecioUnitario')
+     #preciounitario = PriceField('Precio unitario', db_column='preciounitario', currency='BTC')
 
      class Meta:
          db_table = u'detalleCompra'
@@ -866,6 +889,7 @@ class Detallecompraesquel(models.Model):
      idarticulo = models.ForeignKey(Articulo, db_column='idArticulo',verbose_name='Artículo')
      cantidad = MinMaxFloat(max_value=1000000000000, min_value=0.0)
      preciounitario = models.CharField(max_length=200, db_column='precioUnitario',verbose_name='PrecioUnitario')
+     #preciounitario = models.PriceField(db_column='precioUnitario',verbose_name='PrecioUnitario')
 
      class Meta:
          db_table = u'detalleCompra'
@@ -1341,7 +1365,7 @@ class Salida(models.Model):
      fecha = models.DateField()
      entregadoa = models.CharField(max_length=200, db_column='entregadoA',verbose_name='Entregado a') 
      destino = models.CharField(max_length=200)
-     observaciones = models.CharField(max_length=200)
+     observaciones = models.CharField(max_length=200, blank=True,)
      iddeposito =models.ForeignKey(Deposito,db_column='idDeposito',verbose_name='Depósito') 
 
      class Meta:
@@ -1373,7 +1397,7 @@ class VwSalidaesquel(models.Model):
     fecha = models.DateField(null=True)
     entregadoa = models.CharField(max_length=200, db_column='entregadoA',verbose_name='Entregado a') # Field name made lowercase.
     destino = models.CharField(max_length=200)
-    observaciones = models.CharField(max_length=200)
+    observaciones = models.CharField(max_length=200,blank=True,)
     iddeposito = models.ForeignKey(Deposito,db_column='idDeposito',default=3, editable=False,verbose_name='Depósito') # Field name made lowercase.
     
     class Meta:
@@ -1404,7 +1428,7 @@ class VwSalidagaiman(models.Model):
     fecha = models.DateField(null=True)
     entregadoa = models.CharField(max_length=200, db_column='entregadoA',verbose_name='Entregado a') 
     destino = models.CharField(max_length=200)
-    observaciones = models.CharField(max_length=200)
+    observaciones = models.CharField(max_length=200,blank=True,)
     iddeposito = models.ForeignKey(Deposito,db_column='idDeposito',default=4, editable=False,verbose_name='Depósito') 
     
     class Meta:
@@ -1436,7 +1460,7 @@ class VwSalidasarmiento(models.Model):
     fecha = models.DateField(null=True)
     entregadoa = models.CharField(max_length=200, db_column='entregadoA',verbose_name='Entregado a') 
     destino = models.CharField(max_length=200)
-    observaciones = models.CharField(max_length=200)
+    observaciones = models.CharField(max_length=200, blank=True,)
     iddeposito = models.ForeignKey(Deposito,db_column='idDeposito',default=1, editable=False,verbose_name='Depósito') 
     
     class Meta:
@@ -1467,7 +1491,7 @@ class VwSalidamadryn(models.Model):
     fecha = models.DateField(null=True)
     entregadoa = models.CharField(max_length=200, db_column='entregadoA',verbose_name='Entregado a') 
     destino = models.CharField(max_length=200)
-    observaciones = models.CharField(max_length=200)
+    observaciones = models.CharField(max_length=200,blank=True,)
     iddeposito = models.SmallIntegerField(null=True, db_column='idDeposito', default=2,editable=False,verbose_name='Depósito') 
     
     class Meta:
@@ -1498,7 +1522,7 @@ class VwSalidarw(models.Model):
     fecha = models.DateField(null=True)
     entregadoa = models.CharField(max_length=200, db_column='entregadoA',verbose_name='Entregado a') 
     destino = models.CharField(max_length=200)
-    observaciones = models.CharField(max_length=200)
+    observaciones = models.CharField(max_length=200,blank=True,)
     iddeposito = models.ForeignKey(Deposito,db_column='idDeposito',default=5, editable=False,verbose_name='Depósito') 
     
     class Meta:

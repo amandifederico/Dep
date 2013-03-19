@@ -254,7 +254,7 @@ def pdfarticulodeposito (peticion,id,depo):
 def pdfarticulodepositoad (peticion,id):
   
     objarticulodepositoad = ArticuloDepositoAd.objects.get(idarticulodeposito=id)
-    objarticulodepositoad.idarticulo = list(Articulo.objects.filter(idarticulo__exact=id))
+    #objarticulodepositoad.idarticulo = list(Articulo.objects.filter(idarticulo__exact=id))
     html = render_to_string('articulodepositoadr.html', {'pagesize':'A4', 'objarticulodepositoad':objarticulodepositoad},context_instance=RequestContext(peticion))
     return generar_pdf_nombre(html,'articulodepositoad',objarticulodepositoad.idarticulodeposito)
     
